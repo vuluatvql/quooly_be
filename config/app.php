@@ -197,7 +197,7 @@ return [
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         L5Swagger\L5SwaggerServiceProvider::class,
-
+        Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
 
     ],
 
