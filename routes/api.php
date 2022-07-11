@@ -20,6 +20,7 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('create', [ContactController::class, 'store']);
     Route::resource('contact', ContactController::class);
     Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],

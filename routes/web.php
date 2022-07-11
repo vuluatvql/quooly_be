@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -34,6 +35,7 @@ Route::group([
     'middleware' => ['admin'],
 ], function () {
     Route::resource('dashboard', DashboardController::class, ['as' => 'admin']);
+    Route::resource('contact', ContactController::class, ['as' => 'admin']);
     Route::resource('user', UserController::class, ['as' => 'admin']);
     Route::post('check-email', [UserController::class, 'checkEmail'])->name('admin.user.checkEmail');
 });
