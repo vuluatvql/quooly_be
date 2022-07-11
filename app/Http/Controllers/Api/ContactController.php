@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\StatusCode;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -36,15 +37,20 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $validator = Validator::make($request->all(),[
             'first_name'=>'required|max:255',
             'last_name'=>'required|max:255',
             'first_name_furigana '=>'required|max:255',
             'last_name_furigana'=>'required|max:255',
-            'email'=>'required|max:255',
+            'email'=>'required|max:255|email',
             'content '=>'required|max:10000',
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'status_code' => StatusCode::BAD_REQUEST
+            ], StatusCode::OK);
+        }
     }
 
     /**
