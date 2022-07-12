@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name',255)->comment('権限名');
-            $table->string('order_num',255)->comment('表示順');
+            $table->string('name', 255)->comment('権限名');
+            $table->string('order_num', 255)->comment('表示順');
             $table->timestamps();
             $table->softDeletes();
         });
