@@ -5,7 +5,7 @@ namespace App\Repositories\Contact;
 use App\Models\Contact;
 use App\Http\Controllers\BaseController;
 use App\Repositories\Contact\ContactInterface;
-use Illuminate\Support\Facades\Auth;
+use JWTAuth;
 
 class ContactRepository extends BaseController implements ContactInterface
 {
@@ -33,6 +33,11 @@ class ContactRepository extends BaseController implements ContactInterface
         $this->contact->last_name_furigana = $request->last_name_furigana;
         $this->contact->email = $request->email;
         $this->contact->content = $request->content;
+        $this->contact->contact_type = $request->contact_type;
+        if (JWTAuth::user()) {
+            $this->contact->user_id = JWTAuth::user()->id;
+        }
+
         return $this->contact->save();
     }
 

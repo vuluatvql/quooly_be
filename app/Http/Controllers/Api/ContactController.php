@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\StatusCode;
+use App\Enums\ContactType;
 use App\Repositories\Contact\ContactInterface;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
@@ -72,6 +73,11 @@ class ContactController extends Controller
      *                  example="xxx@gmail.com"
      *              ),
      *              @OA\Property(
+     *                  property="contact_type",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
      *                  property="content",
      *                  type="string",
      *                  example="abc"
@@ -112,7 +118,7 @@ class ContactController extends Controller
                 'required',
                 Rule::in(array_map(function ($e) {
                     return (string)$e;
-                }, Gender::getValues()))
+                }, ContactType::getValues()))
             ]
         ]);
         if ($validator->fails()) {
