@@ -30,4 +30,22 @@ final class ContactStatus extends Enum
         }
         return $data;
     }
+
+    public static function descriptionArray()
+    {
+        $descriptions = [];
+        foreach (self::getKeys() as $value) {
+            $descriptions[] = self::getDescription(self::getValue($value));
+        }
+        return $descriptions;
+    }
+    public static function getValueByDescription($description)
+    {
+        foreach (self::getKeys() as $value) {
+            if (self::getDescription(self::getValue($value)) == $description) {
+                return self::getValue($value);
+            }
+        }
+        return null;
+    }
 }

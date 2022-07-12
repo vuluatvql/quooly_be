@@ -4,18 +4,18 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-final class ContactType extends Enum
+final class PublishFlag extends Enum
 {
-    const USER = 1;
-    const READ_ESTATE_USER = 2;
+    const UN_PUBLISH = 0;
+    const PUBLISH = 1;
     public static function getDescription($value): string
     {
         switch ($value) {
-            case self::USER:
-                return 'ユーザー';
+            case self::UN_PUBLISH:
+                return '無効';
                 break;
-            case self::READ_ESTATE_USER:
-                return '不動産ユーザーID';
+            case self::PUBLISH:
+                return '有効';
                 break;
             default:
                 return "";
