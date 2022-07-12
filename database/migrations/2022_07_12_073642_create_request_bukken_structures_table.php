@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('request_bukken_structures', function (Blueprint $table) {
-            $table->id()->unique();
+            $table->id();
             $table->bigInteger('request_id')->comment('ニーズID');
             $table->integer('building_structure')->comment('構造（ENUM）');
             $table->timestamps();

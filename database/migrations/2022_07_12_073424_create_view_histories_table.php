@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('view_histories', function (Blueprint $table) {
-            $table->id()->unique();
+            $table->id();
             $table->bigInteger('user_id')->nullable()->comment('ユーザーID');
             $table->bigInteger('bukken_id')->nullable()->comment('物件ID');
             $table->integer('view_count')->nullable()->comment('閲覧数');

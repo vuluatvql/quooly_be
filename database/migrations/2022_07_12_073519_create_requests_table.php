@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('requests', function (Blueprint $table) {
-            $table->id()->unique();
+            $table->id();
             $table->string('name', 255);
             $table->bigInteger('user_id')->comment('ユーザーID');
             $table->bigInteger('prefecture_id')->comment('都道府県ID');
