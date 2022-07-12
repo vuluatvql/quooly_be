@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Repositories\User\UserInterface;
+use App\Repositories\Admin\AdminInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class LoginController extends BaseController
 {
-    private $user;
-    public function __construct(UserInterface $user)
+    private $admin;
+    public function __construct(AdminInterface $admin)
     {
-        $this->user = $user;
+        $this->admin = $admin;
     }
     /**
      * Display a listing of the resource.
@@ -52,7 +52,7 @@ class LoginController extends BaseController
     {
         $credentials = $request->only('email', 'password', 'type');
         if (Auth::guard('admin')->attempt($credentials, $request->remember_me ?? false)) {
-            if (!$this->user->updateLastLogin(Auth::guard('admin')->user()->id)) {
+            if (!$this->admin->updateLastLogin(Auth::guard('admin')->user()->id)) {
                 Auth::guard('admin')->logout();
                 return redirect('/');
             }
