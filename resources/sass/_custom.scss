@@ -199,3 +199,6 @@ table tbody tr td {
 .btn-default:hover {
     border-color: #d8dbe0 !important;
 }
+.content-break > br:first-of-type {
+    display: none;
+}
