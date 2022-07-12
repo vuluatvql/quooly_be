@@ -87,6 +87,102 @@
                     }
                 ]
             }
+        },
+        "/api/v1/user_info": {
+            "get": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "get current user info",
+                "operationId": "35a4073e24763b4958b37bebf8d32389",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/contact": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Contact store",
+                "operationId": "4c4ea3dae773af561265b5f3d858dc4e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "nguyen"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "xxx"
+                                    },
+                                    "first_name_furigana": {
+                                        "type": "string",
+                                        "example": "お"
+                                    },
+                                    "last_name_furigana": {
+                                        "type": "string",
+                                        "example": "ス"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "xxx@gmail.com"
+                                    },
+                                    "contact_type": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "abc"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
         }
     },
     "components": {

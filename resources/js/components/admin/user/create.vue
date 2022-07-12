@@ -125,7 +125,7 @@ export default {
       if (rule != "default") {
         defineRule(rule, rules[rule]);
       }
-    });
+    }); 
   },
   components: {
     Loader,
