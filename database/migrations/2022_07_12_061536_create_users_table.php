@@ -13,18 +13,23 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->integer('role_id')->comment('ロールID');
             $table->string('first_name', 255)->comment('お名前（姓）');
             $table->string('last_name', 255)->comment('お名前（名）');
             $table->string('first_name_furigana', 255)->comment('ふりがな（姓）');
             $table->string('last_name_furigana', 255)->comment('ふりがな（名）');
             $table->string('email', 255)->comment('メールアドレス');
-            $table->text('content')->comment('問い合わせ内容');
-            $table->bigInteger('user_id')->nullable()->comment('ユーザーID');
-            $table->bigInteger('business_user_id')->nullable()->comment('不動産ユーザーID');
-            $table->tinyInteger('contact_type')->default(1)->nullable()->comment('1: ユーザー、2: 不動産ユーザーID');
-            $table->tinyInteger('status')->default(0)->nullable()->comment('0: 未対応、1: 対応済み');
+            $table->string('password', 255)->comment('パスワード）');
+            $table->string('phone_number', 255)->nullable()->comment('電話番号');
+            $table->string('postcode', 255)->nullable()->comment('郵便番号');
+            $table->bigInteger('prefecture_id')->nullable()->comment('都道府県ID）');
+            $table->string('city', 255)->nullable()->comment('住所（市区町）');
+            $table->string('address', 255)->nullable()->comment('住所（番地・建物名・部屋番号）');
+            $table->string('reset_password_token', 255)->nullable();
+            $table->dateTime('reset_password_token_exprire')->nullable();
+            $table->string('remember_token', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -37,6 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contacts');
+        Schema::dropIfExists('users');
     }
 };
