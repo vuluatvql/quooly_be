@@ -24,6 +24,7 @@ import PopupAlert from "./components/common/popupAlert.vue";
 import LimitPageOption from "./components/common/limitPageOption.vue";
 import UserCreate from "./components/admin/user/create.vue";
 import UserEdit from "./components/admin/user/edit.vue";
+import ContactEdit from "./components/admin/contact/edit.vue";
 
 app.component("btn-delete-confirm", BtnDeleteConfirm);
 app.component("data-empty", DataEmpty);
@@ -31,5 +32,6 @@ app.component("popup-alert", PopupAlert);
 app.component("limit-page-option", LimitPageOption);
 app.component("user-create", UserCreate);
 app.component("user-edit", UserEdit);
+app.component("contact-edit", ContactEdit);
 
 app.mount("#app");

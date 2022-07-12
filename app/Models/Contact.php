@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Enums\ContactStatus;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Kyslik\ColumnSortable\Sortable;
@@ -37,4 +37,9 @@ class Contact extends Model
      * @var array
      */
     protected $fillable = ['first_name', 'last_name', 'first_name_furigana', 'last_name_furigana', 'email', 'content', 'user_id', 'business_user_id', 'contact_type', 'status', 'created_at', 'updated_at', 'deleted_at'];
+    protected $appends = ['contact_status_text'];
+    public function getContactStatusTextAttribute()
+    {
+        return ContactStatus::getDescription($this->status);
+    }
 }
