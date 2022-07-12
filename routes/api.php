@@ -21,6 +21,8 @@ Route::group([
 ], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('create', [ContactController::class, 'store']);
+//    Route::get('contact/{id}', [ContactController::class, 'show']);
+//    Route::get('delete/{id}', [ContactController::class, 'destroy']);
     Route::resource('contact', ContactController::class);
     Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],

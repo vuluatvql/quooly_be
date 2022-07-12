@@ -60,10 +60,8 @@ class ContactController extends Controller
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }
-        $ob = new Contact();
-        $ob->fill($request->all());
-        $ob->save();
-//        $this->contactInterface->store($request->all());
+
+        return $this->contactInterface->store($request);
     }
 
     /**
@@ -74,7 +72,7 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->contactInterface->getById($id);
     }
 
     /**
@@ -106,8 +104,8 @@ class ContactController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $this->contactInterface->destroy();
     }
 }

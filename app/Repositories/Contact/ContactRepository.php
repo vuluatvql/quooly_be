@@ -17,17 +17,23 @@ class ContactRepository extends BaseController implements ContactInterface
 
     public function get($request)
     {
-        // TODO: Implement get() method.
+        return Contact::all();
     }
 
     public function getById($id)
     {
-        // TODO: Implement getById() method.
+        return Contact::where('id',$id)->first();
     }
 
     public function store($request)
     {
-        // TODO: Implement store() method.
+        $this->contact->first_name = $request->first_name;
+        $this->contact->last_name = $request->last_name;
+        $this->contact->first_name_furigana = $request->first_name_furigana;
+        $this->contact->last_name_furigana = $request->last_name_furigana;
+        $this->contact->email = $request->email;
+        $this->contact->content = $request->content;
+        return $this->contact->save();
     }
 
     public function update($request, $id)
@@ -37,6 +43,10 @@ class ContactRepository extends BaseController implements ContactInterface
 
     public function destroy($id)
     {
-        // TODO: Implement destroy() method.
+//        $contact = $this->contact::where('id',$id)->first();
+        $contact = Contac::where('id',$id)->first();
+
+        $contact->delete();
+
     }
 }
