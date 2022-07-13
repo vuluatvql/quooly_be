@@ -1,3 +1,14 @@
+@php
+$routeName = \Route::currentRouteName();
+$routeContact = [
+    'admin.contact.index',
+    'admin.contact.create',
+    'admin.contact.store',
+    'admin.contact.show',
+    'admin.contact.edit',
+    'admin.contact.update'
+];
+@endphp
 <div class="sidebar sidebar-dark sidebar-fixed sidebar-lg-show" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
         <img class="sidebar-brand-full" src="{{ url('images/logo.png') }}" width="55" height="46">
@@ -15,16 +26,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
                                     <i class="nav-icon fa fa-home" aria-hidden="true"></i>
-                                    Dashboard
+                                    ホーム
                                 </a>
                             </li>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="simplebar-mask">
-                <div class="simplebar-offset">
-                    <div class="simplebar-content-wrapper">
                         <div class="simplebar-content">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.user.index') }}">
@@ -33,16 +38,10 @@
                                 </a>
                             </li>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="simplebar-mask">
-                <div class="simplebar-offset">
-                    <div class="simplebar-content-wrapper">
                         <div class="simplebar-content">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.contact.index') }}">
-                                    <i class="nav-icon fa fa-user" aria-hidden="true"></i>
+                                <a class="nav-link {{ in_array($routeName, $routeContact) ? 'active' : '' }}" href="{{ route('admin.contact.index') }}">
+                                    <i class="nav-icon fa fa-phone" aria-hidden="true"></i>
                                     問い合わせ一覧
                                 </a>
                             </li>
