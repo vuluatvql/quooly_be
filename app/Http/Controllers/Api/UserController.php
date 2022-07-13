@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\MailNoti;
+use App\Enums\IndustryType;
+use App\Enums\JobType;
 use App\Models\Prefecture;
 use App\Repositories\User\UserInterface;
 use App\Enums\StatusCode;
@@ -197,14 +200,47 @@ class UserController extends Controller
                 'max:255',
                 Rule::unique('users')->whereNull('deleted_at')
             ],
-            'birthday' => 'required|date_format:Y/m/d|after_or_equal:'.Carbon::now()->format('Y/m/d'),
-            'content' => 'required|max:10000',
+            'birthday' => 'required|date_format:Y/m/d|before_or_equal:' . Carbon::now()->format('Y/m/d'),
             'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
-            'phone_number' => 'nullable|regex:/^((0(\d-\d{4}-\d{4}))|(0(\d{3}-\d{2}-\d{4}))|(0(\d{2}-\d{3}-\d{4}))|((070|080|090|050)(-\d{4}-\d{4})))$/',
+            'phone_number' => 'nullable',
             'postcode' => 'nullable|max:10',
             'prefecture_id' => [
                 'nullable',
                 Rule::in(Prefecture::pluck('id'))
+            ],
+            'city' => 'nullable|max:255',
+            'address' => 'nullable|max:255',
+            'jobs_type' => [
+                'nullable',
+                'integer',
+                Rule::in(JobType::getValues())
+            ],
+            'company_industry_type' => [
+                'nullable',
+                'integer',
+                Rule::in(IndustryType::getValues())
+            ],
+            'rent_income' => 'nullable|integer',
+            'annual_income' => 'nullable|integer',
+            'user_income' => 'nullable|integer',
+            'property_building' => 'nullable|integer',
+            'property_division' => 'nullable|integer',
+            'property_kodate_chintai' => 'nullable|integer',
+            'mail_magazine_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
+            ],
+            'request_noti_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
+            ],
+            'favorite_noti_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
+            ],
+            'seminar_noti_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
             ],
         ]);
         if ($validator->fails()) {
@@ -212,6 +248,18 @@ class UserController extends Controller
                 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
+        }
+        if ($request->phone_number && $request->phone_number != null) {
+            $regexTelephone = "/^0(\d-\d{4}-\d{4})$/";
+            $regexTelephone1 = "/^0(\d{3}-\d{2}-\d{4})$/";
+            $regexTelephone2 = "/^0(\d{2}-\d{3}-\d{4})$/";
+            $regexTelephone3 = "/^(070|080|090|050)(-\d{4}-\d{4})$/";
+            if (!preg_match($regexTelephone, $request->phone_number) && !preg_match($regexTelephone1, $request->phone_number) && !preg_match($regexTelephone2, $request->phone_number) && !preg_match($regexTelephone3, $request->phone_number)) {
+                return response()->json([
+                    'message' => 'The last name phone_number format is invalid.',
+                    'status_code' => StatusCode::BAD_REQUEST
+                ], StatusCode::OK);
+            }
         }
     }
 

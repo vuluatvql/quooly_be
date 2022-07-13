@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactController;
-use App\Http\Controllers\Api\ViewHistoryController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ViewHistoryController;
+use App\Http\Controllers\Api\FavoriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::group([
     Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],
     ], function () {
+        Route::resource('favorites', FavoriesController::class);
         Route::get('user_info', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::resource('view-history', ViewHistoryController::class);
