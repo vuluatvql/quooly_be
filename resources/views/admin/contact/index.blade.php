@@ -43,7 +43,7 @@ use Carbon\Carbon;
                                     </div>
                                 </div>
                                 <table class="table table-responsive-sm table-striped">
-                                    <thead class="table-light">
+                                    <thead class="table-dark">
                                         <tr>
                                             <th>
                                                 @sortablelink('first_name', 'お名前 (姓)')
