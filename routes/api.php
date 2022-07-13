@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ViewHistoryController;
 use App\Http\Controllers\Api\FavoriesController;
+use App\Http\Controllers\Api\ResetPasswordController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::resource('reset-password', ResetPasswordController::class);
     Route::resource('contact', ContactController::class);
     Route::resource('user', UserController::class);
     Route::resource('forgot-password', ForgotPasswordController::class);
