@@ -200,10 +200,9 @@ class UserController extends Controller
                 'max:255',
                 Rule::unique('users')->whereNull('deleted_at')
             ],
-            'birthday' => 'required|date_format:Y/m/d|after_or_equal:'.Carbon::now()->format('Y/m/d'),
-            'content' => 'required|max:10000',
+            'birthday' => 'required|date_format:Y/m/d|before_or_equal:' . Carbon::now()->format('Y/m/d'),
             'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
-            'phone_number' => 'nullable|regex:/^((0(\d-\d{4}-\d{4}))|(0(\d{3}-\d{2}-\d{4}))|(0(\d{2}-\d{3}-\d{4}))|((070|080|090|050)(-\d{4}-\d{4})))$/',
+            'phone_number' => 'nullable',
             'postcode' => 'nullable|max:10',
             'prefecture_id' => [
                 'nullable',
@@ -249,6 +248,18 @@ class UserController extends Controller
                 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
+        }
+        if ($request->phone_number && $request->phone_number != null) {
+            $regexTelephone = "/^0(\d-\d{4}-\d{4})$/";
+            $regexTelephone1 = "/^0(\d{3}-\d{2}-\d{4})$/";
+            $regexTelephone2 = "/^0(\d{2}-\d{3}-\d{4})$/";
+            $regexTelephone3 = "/^(070|080|090|050)(-\d{4}-\d{4})$/";
+            if (!preg_match($regexTelephone, $request->phone_number) && !preg_match($regexTelephone1, $request->phone_number) && !preg_match($regexTelephone2, $request->phone_number) && !preg_match($regexTelephone3, $request->phone_number)) {
+                return response()->json([
+                    'message' => 'The last name phone_number format is invalid.',
+                    'status_code' => StatusCode::BAD_REQUEST
+                ], StatusCode::OK);
+            }
         }
     }
 
