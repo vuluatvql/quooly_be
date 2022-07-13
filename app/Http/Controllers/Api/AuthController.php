@@ -204,45 +204,4 @@ class AuthController extends Controller
     }
 
 
-    public function forgotPassword(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => [
-                'required',
-                'max:255',
-                'email'
-            ]
-        ], [
-            'email.required' => 'メールフィールドは必須です。',
-            'email.email' => 'メールは有効なメールアドレスである必要があります。',
-            'email.max' => '電子メールは255文字を超えてはなりません。',
-        ]);
-        if ($validator->fails()) {
-            $message = array_combine($validator->errors()->keys(), $validator->errors()->all());
-            return response()->json($message, StatusCode::NOT_FOUND);
-        }
-        $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return response()->json([
-                'status_code' => StatusCode::NOT_FOUND,
-                'message' => 'メールでユーザーを見つけることができません。',
-            ], StatusCode::NOT_FOUND);
-        }
-        $user->reset_password_token = md5($request->email . random_bytes(25) . Carbon::now());;
-        $user->reset_password_token_exprire = Carbon::now()->addMinutes(env('RESET_PASSWORD_TOKEN_EXPIRED_MINUS'));
-        if ($user->save()) {
-            $mailContents = [
-                'url' => route('forgotPassword', $user->reset_password_token),
-                'name' => $user->display_name
-            ];
-            Mail::to($user->email)->send(new ForgotPasswordNotifyMail($mailContents));
-            return response()->json([
-                'status_code' => StatusCode::OK,
-            ], StatusCode::OK);
-        }
-        return response()->json([
-            'status_code' => StatusCode::NOT_FOUND,
-            'message' => 'パスワードをリセットできません。',
-        ], StatusCode::NOT_FOUND);
-    }
 }
