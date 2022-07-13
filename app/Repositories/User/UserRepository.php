@@ -144,14 +144,13 @@ class UserRepository extends BaseController implements UserInterface
         if (!$account->save()) {
             return false;
         }
-        switch ($account->role_id)
-        {
+        switch ($account->role_id) {
             case UserRole::USER:
-                $link = env('SITE_USER_URL') . '/password-reset/' . $account->reset_password_token;
+                $link = env('SITE_USER_URL') . '/reset-password/' . $account->reset_password_token;
                 break;
 
             case UserRole::BESINESS:
-                $link = env('SITE_BUSINESS_URL') . '/password-reset/' . $account->reset_password_token;
+                $link = env('SITE_BUSINESS_URL') . '/reset-password/' . $account->reset_password_token;
                 break;
 
             default:

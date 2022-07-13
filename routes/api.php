@@ -25,10 +25,10 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
     Route::post('login', [AuthController::class, 'login']);
-    Route::resource('reset-password', ResetPasswordController::class);
     Route::resource('contact', ContactController::class);
     Route::resource('user', UserController::class);
     Route::resource('forgot-password', ForgotPasswordController::class);
+    Route::resource('reset-password', ResetPasswordController::class);
 
     Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],

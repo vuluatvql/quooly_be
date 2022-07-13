@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UserRole;
 use App\Enums\StatusCode;
 use App\Repositories\User\UserInterface;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ResetPasswordController extends Controller
 {
@@ -36,15 +39,9 @@ class ResetPasswordController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -70,80 +67,77 @@ class ResetPasswordController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param   int $id
-     * @return \Illuminate\Http\Response
-     */
-
-    /**
-     *  @OA\Put(
-     *      path="/api/v1/reset-password",
-     *      tags={"reset-password"},
-     *      summary="resert-password update",
+     *  @OA\PUT(
+     *      path="/api/v1/reset-password/{token}",
+     *      tags={"Login"},
+     *      summary="reset password",
+     *      @OA\Parameter(
+     *          name="token",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              example="cd7db2109832f426bac49b4838ffafd1"
+     *          )
+     *      ),
      *      @OA\RequestBody(
-     *          @OA\JsonContent(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="token",
-     *                  type="string",
-     *                  example="ahgajhakdhuwdgghgca"
-     *              ),
-     *          ),
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
      *                  property="password",
      *                  type="string",
-     *                  example="12345"
+     *                  example="12345678"
      *              ),
-     *          ),
-     *          @OA\JsonContent(
-     *              type="object",
      *              @OA\Property(
      *                  property="re_password",
      *                  type="string",
-     *                  example="12345"
+     *                  example="12345678"
      *              ),
      *          ),
      *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Success",
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=400,
-     *          description="Invalid request"
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthorized"
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="Internal Server Error"
-     *      ),
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *          mediaType="application/json",
+     *      )
+     *  ),
+     *  @OA\Response(
+     *      response=400,
+     *      description="Invalid request"
+     *  ),
+     * @OA\Response(
+     *      response=401,
+     *      description="Unauthorized"
+     *  ),
+     *  @OA\Response(
+     *      response=500,
+     *      description="Internal Server Error"
+     *  ),
      *  )
      **/
-    public function update(Request $request, $id)
+    public function update(Request $request, $token)
     {
-        $validator = Validator::make($request->all(), [
-            'token' => 'required|max:255',
+        $dataRequest = $request->all();
+        $dataRequest['reset_password_token'] = $token;
+        $validator = Validator::make($dataRequest, [
+            'reset_password_token' => [
+                'required',
+                'max:255',
+                Rule::exists('users')->where(function ($query) use ($request) {
+                    return $query->whereIn('role_id', [UserRole::BESINESS, UserRole::USER])->whereNull('deleted_at')->where('reset_password_token_expire', '>', Carbon::now());
+                })
+            ],
             'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
             're_password' => 'required_with:password|same:password|max:16|min:8|regex:/^[A-Za-z0-9]*$/'
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'message' => $validator->errors(),
-                // 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         };
-        if ($this->user->updatePasswordByToken($request, $request->token)) {
+        if ($this->user->updatePasswordByToken($request, $token)) {
             return response()->json([
                 'message' => 'パスワードのリセット成功',
                 'status_code' => StatusCode::OK,

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 
@@ -83,6 +84,5 @@ class ForgotPasswordController extends Controller
             'status_code' => StatusCode::OK,
             'message' => '入力されたメールアドレスに確認メールを送信いたしました。メールの手順に沿ってパスワードを変更してください'
         ], StatusCode::OK);
-
     }
 }
