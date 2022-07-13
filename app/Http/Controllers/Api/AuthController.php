@@ -245,4 +245,30 @@ class AuthController extends Controller
             'message' => 'パスワードをリセットできません。',
         ], StatusCode::NOT_FOUND);
     }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required|max:255',
+            'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
+            're_password' => 'required_with:password|same:password|max:16|min:8|regex:/^[A-Za-z0-9]*$/'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors(),
+                // 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'status_code' => StatusCode::BAD_REQUEST
+            ], StatusCode::OK);
+        };
+        if ($this->user->updatePasswordByToken($request, $request->token)) {
+            return response()->json([
+                'message' => 'パスワードのリセット成功',
+                'status_code' => StatusCode::OK,
+            ], StatusCode::OK);
+        }
+        return response()->json([
+            'message' => "トークンが無効です",
+            'status_code' => StatusCode::BAD_REQUEST
+        ], StatusCode::OK);
+    }
 }

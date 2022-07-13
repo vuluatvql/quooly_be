@@ -23,6 +23,7 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
     Route::resource('contact', ContactController::class);
     Route::resource('user', UserController::class);
     Route::group([
