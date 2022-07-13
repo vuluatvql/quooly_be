@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\MailNoti;
+use App\Enums\IndustryType;
+use App\Enums\JobType;
 use App\Models\Prefecture;
 use App\Repositories\User\UserInterface;
 use App\Enums\StatusCode;
@@ -205,6 +208,40 @@ class UserController extends Controller
             'prefecture_id' => [
                 'nullable',
                 Rule::in(Prefecture::pluck('id'))
+            ],
+            'city' => 'nullable|max:255',
+            'address' => 'nullable|max:255',
+            'jobs_type' => [
+                'nullable',
+                'integer',
+                Rule::in(JobType::getValues())
+            ],
+            'company_industry_type' => [
+                'nullable',
+                'integer',
+                Rule::in(IndustryType::getValues())
+            ],
+            'rent_income' => 'nullable|integer',
+            'annual_income' => 'nullable|integer',
+            'user_income' => 'nullable|integer',
+            'property_building' => 'nullable|integer',
+            'property_division' => 'nullable|integer',
+            'property_kodate_chintai' => 'nullable|integer',
+            'mail_magazine_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
+            ],
+            'request_noti_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
+            ],
+            'favorite_noti_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
+            ],
+            'seminar_noti_flag' => [
+                'required',
+                Rule::in(MailNoti::getValues())
             ],
         ]);
         if ($validator->fails()) {
