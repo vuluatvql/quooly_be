@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\bukkenType;
 use App\Repositories\ViewHistory\ViewHistoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Enums\StatusCode;
-use App\Http\Requests\ViewHistoryRequest;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ViewHistoryController extends Controller
 {
@@ -37,13 +39,59 @@ class ViewHistoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\ViewHistoryRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(ViewHistoryRequest $request)
+     *  @OA\Post(
+     *      path="/api/v1/view_history",
+     *      tags={"ViewHistory"},
+     *      summary="ViewHistory store",
+     *      @OA\RequestBody(
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="bukken_id",
+     *                  type="int",
+     *                  example=1
+     *              ),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Invalid request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error"
+     *      ),
+     *  )
+     **/
+    public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'bukken_id' => [
+                'required',
+                Rule::in([
+                    bukkenType::APARTMENT, bukkenType::BUILDING_APARTMENT,
+                    bukkenType::DETACHED_HOURSE, bukkenType::LAND, bukkenType::SELECTIONAL_APARTMENT
+                ])
+            ]
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'status_code' => StatusCode::BAD_REQUEST
+            ], StatusCode::OK);
+        }
+        
         if($this->viewHistory->store($request)){
             return response()->json([
                 'message' => 'より多くの成功の歴史',
