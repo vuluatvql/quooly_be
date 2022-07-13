@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Enums\bukkenType;
 use App\Enums\StatusCode;
-use Illuminate\Routing\Controller;
 use App\Repositories\Favorites\FavoritesInterface;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 

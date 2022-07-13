@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Favorites\FavoritesInterface;
+use App\Repositories\Favorites\FavoritesRepository;
 use App\Repositories\User\UserInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\Contact\ContactInterface;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AdminInterface::class, AdminRepository::class);
         $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(ContactInterface::class, ContactRepository::class);
+        $this->app->bind(FavoritesInterface::class, FavoritesRepository::class);
     }
 
     /**
