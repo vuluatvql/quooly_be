@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\FavoriesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -37,5 +38,6 @@ Route::group([
     Route::resource('dashboard', DashboardController::class, ['as' => 'admin']);
     Route::resource('user', UserController::class, ['as' => 'admin']);
     Route::resource('contact', ContactController::class, ['as' => 'admin']);
+    Route::resource('favories', FavoriesController::class, ['as' => 'admin']);
     Route::post('check-email', [UserController::class, 'checkEmail'])->name('admin.user.checkEmail');
 });
