@@ -21,22 +21,19 @@ class ForgotPasswordController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/forgot_password",
-     *      tags={"Forgot password"},
-     *      summary="Forgot password for User + Busineess",
-     *      security={{"bearerAuth":{}}},
-     * @OA\RequestBody(
-     *      @OA\MediaType(
-     *          mediaType="multipart/form-data",
-     *          @OA\Schema(
+     *      path="/api/v1/forgot-password",
+     *      tags={"Login"},
+     *      summary="Forgot password",
+     *      @OA\RequestBody(
+     *          @OA\JsonContent(
+     *              type="object",
      *              @OA\Property(
      *                  property="email",
-     *                  type="string"
+     *                  type="string",
+     *                  example="user@gmail.com"
      *              ),
-     *              example={"email": "user@gmail.com"}
-     *          )
-     *      )
-     *  ),
+     *          ),
+     *      ),
      *  @OA\Response(
      *      response=200,
      *      description="Success",
@@ -69,24 +66,22 @@ class ForgotPasswordController extends Controller
                     return $query->whereIn('role_id', [UserRole::BESINESS, UserRole::USER])->whereNull('deleted_at');
                 })
             ]
-        ], [
-            'email.required' => 'メールフィールドは必須です。',
-            'email.email' => 'メールは有効なメールアドレスである必要があります。',
-            'email.max' => '電子メールは255文字を超えてはなりません。',
-            'email.exists' => 'メールでユーザーを見つけることができません。'
         ]);
         if ($validator->fails()) {
-            $message = array_combine($validator->errors()->keys(), $validator->errors()->all());
-            return response()->json($message, StatusCode::NOT_FOUND);
+            return response()->json([
+                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'status_code' => StatusCode::BAD_REQUEST
+            ], StatusCode::OK);
         }
         if (!$this->user->generalResetPass($request)) {
             return response()->json([
                 'status_code' => StatusCode::NOT_FOUND,
                 'message' => 'メールでユーザーを見つけることができません。',
-            ], StatusCode::NOT_FOUND);
+            ], StatusCode::OK);
         }
         return response()->json([
             'status_code' => StatusCode::OK,
+            'message' => '入力されたメールアドレスに確認メールを送信いたしました。メールの手順に沿ってパスワードを変更してください'
         ], StatusCode::OK);
 
     }

@@ -140,18 +140,18 @@ class UserRepository extends BaseController implements UserInterface
             return false;
         }
         $account->reset_password_token = md5($request->email . random_bytes(25) . Carbon::now());
-        $account->reset_password_token_expire = Carbon::now()->addMinutes(env('EXPIRE_TOKEN', 30));
+        $account->reset_password_token_expire = Carbon::now()->addMinutes(env('EXPIRE_TOKEN_RESET_PASSWORD', 30));
         if (!$account->save()) {
             return false;
         }
         switch ($account->role_id)
         {
             case UserRole::USER:
-                $link = env('SITE_USER_URL') . '/password_reset/' . $account->reset_password_token;
+                $link = env('SITE_USER_URL') . '/password-reset/' . $account->reset_password_token;
                 break;
 
             case UserRole::BESINESS:
-                $link = env('SITE_BUSINESS_URL') . '/password_reset/' . $account->reset_password_token;
+                $link = env('SITE_BUSINESS_URL') . '/password-reset/' . $account->reset_password_token;
                 break;
 
             default:

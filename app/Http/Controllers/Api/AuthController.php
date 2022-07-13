@@ -29,23 +29,21 @@ class AuthController extends Controller
      *      path="/api/v1/login",
      *      tags={"Login"},
      *      summary="Login",
-     *      security={{"bearerAuth":{}}},
-     * @OA\RequestBody(
-     *      @OA\MediaType(
-     *          mediaType="multipart/form-data",
-     *          @OA\Schema(
+     *      @OA\RequestBody(
+     *          @OA\JsonContent(
+     *              type="object",
      *              @OA\Property(
      *                  property="email",
-     *                  type="string"
+     *                  type="string",
+     *                  example="user@gmail.com"
      *              ),
      *              @OA\Property(
      *                  property="password",
-     *                  type="string"
+     *                  type="string",
+     *                  example="12345678"
      *              ),
-     *              example={"email": "admin@gmail.com", "password": "12345678"}
-     *          )
-     *      )
-     *  ),
+     *          ),
+     *      ),
      *  @OA\Response(
      *      response=200,
      *      description="Success",
@@ -135,44 +133,6 @@ class AuthController extends Controller
         auth()->logout(true);
         return response()->json(['message' => 'ユーザーが正常にログアウトしました', 'status_code' => StatusCode::OK], StatusCode::OK);
     }
-
-
-    /**
-     *  @OA\GET(
-     *      path="/api/v1/user_info",
-     *      tags={"Login"},
-     *      summary="get current user info",
-     *      security={{"bearerAuth":{}}},
-     *  @OA\Response(
-     *      response=200,
-     *      description="Success",
-     *      @OA\MediaType(
-     *          mediaType="application/json",
-     *      )
-     *  ),
-     *  @OA\Response(
-     *      response=400,
-     *      description="Invalid request"
-     *  ),
-     * @OA\Response(
-     *      response=401,
-     *      description="Unauthorized"
-     *  ),
-     *  @OA\Response(
-     *      response=500,
-     *      description="Internal Server Error"
-     *  ),
-     *  )
-     **/
-
-    public function user()
-    {
-        return response()->json([
-            'data' => JWTAuth::user(),
-            'status_code' => StatusCode::OK
-        ], StatusCode::OK);
-    }
-
 
     public function refresh()
     {

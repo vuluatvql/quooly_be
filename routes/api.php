@@ -32,7 +32,6 @@ Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],
     ], function () {
         Route::resource('favorites', FavoriesController::class);
-        Route::get('user_info', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::resource('view-history', ViewHistoryController::class);
     });
