@@ -90,7 +90,7 @@ class ContactController extends BaseController
         if (!$contact) {
             return redirect(session()->get('admin.contact.list')[0] ?? route('admin.contact.index'));
         }
-        $contact_status_list = [
+        $contactStatusList = [
             [
                 'status' => ContactStatus::NOT_SUPPORT,
                 'text' => ContactStatus::getDescription(ContactStatus::NOT_SUPPORT)
@@ -104,7 +104,7 @@ class ContactController extends BaseController
             'title' => '問い合わせ編集',
             'breadcrumbs' => $breadcrumbs,
             'contact' => $contact,
-            'contact_status_list' => $contact_status_list
+            'contact_status_list' => $contactStatusList
         ]);
     }
 

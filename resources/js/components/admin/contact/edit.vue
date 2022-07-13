@@ -159,7 +159,7 @@ export default {
           contact_type:this.data.contact.contact_type,
           status:this.data.contact.status,
           status_text:this.data.contact.contact_status_text,
-          status_list:this.data.contact_status_list
+          status_list:this.data.contactStatusList
       },
     };
   },
