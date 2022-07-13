@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('first_name_furigana', 255)->comment('ふりがな（姓）');
             $table->string('last_name_furigana', 255)->comment('ふりがな（名）');
             $table->string('email', 255)->comment('メールアドレス');
+            $table->date('birthday')->comment('生年月日');
             $table->string('password', 255)->comment('パスワード）');
             $table->string('phone_number', 255)->nullable()->comment('電話番号');
             $table->string('postcode', 255)->nullable()->comment('郵便番号');
@@ -28,8 +29,9 @@ return new class extends Migration
             $table->string('city', 255)->nullable()->comment('住所（市区町）');
             $table->string('address', 255)->nullable()->comment('住所（番地・建物名・部屋番号）');
             $table->string('reset_password_token', 255)->nullable();
-            $table->dateTime('reset_password_token_exprire')->nullable();
+            $table->dateTime('reset_password_token_expire')->nullable();
             $table->string('remember_token', 255)->nullable();
+            $table->datetime('last_login_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

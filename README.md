@@ -1,11 +1,11 @@
 # go to project
 # install app's dependencies
-$ composer install
-
-# install app's dependencies
 $ install php >8.0
 $ install node v14x
 $ install npm v6x
+
+# install app's dependencies
+$ composer install
 
 $ cp env.example .env
 
@@ -27,7 +27,8 @@ $ php artisan key:generate
 $ php artisan migrate:refresh --seed
 
 # generate mixing
-$ npm run dev or npm run build
+$ npm install or yarn install
+$ npm run dev or npm run build or yarn build
 
 # and repeat generate mixing
 $ npm run dev
@@ -46,3 +47,6 @@ php artisan jwt:secret
 
 #check code before commit 
 $ phpmd app text musashi.xml
+
+# generate api docs, access xxx/api/documentation
+$ php artisan l5-swagger:generate
