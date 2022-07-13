@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ContactStatus;
 use App\Enums\StatusCode;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\ContactRequest;
@@ -11,10 +12,10 @@ use Illuminate\Http\Request;
 
 class ContactController extends BaseController
 {
-    private $contactInterface;
-    public function __construct(ContactInterface $contactInterface)
+    private $contact;
+    public function __construct(ContactInterface $contact)
     {
-        $this->contactInterface = $contactInterface;
+        $this->contact = $contact;
     }
     /**
      * Display a listing of the resource.
@@ -32,7 +33,7 @@ class ContactController extends BaseController
         return view('admin.contact.index', [
             'title' => '問い合わせ一覧',
             'breadcrumbs' => $breadcrumbs,
-            'contacts' => $this->contactInterface->get($request),
+            'contacts' => $this->contact->get($request),
             'request' => $request,
             'newSizeLimit' => $newSizeLimit
         ]);
@@ -85,14 +86,25 @@ class ContactController extends BaseController
             ],
             '問い合わせ編集'
         ];
-        $contact = $this->contactInterface->getById($id);
+        $contact = $this->contact->getById($id);
         if (!$contact) {
             return redirect(session()->get('admin.contact.list')[0] ?? route('admin.contact.index'));
         }
+        $contact_status_list = [
+            [
+                'status' => ContactStatus::NOT_SUPPORT,
+                'text' => ContactStatus::getDescription(ContactStatus::NOT_SUPPORT)
+            ],
+            [
+                'status' => ContactStatus::SUPPORTED,
+                'text' => ContactStatus::getDescription(ContactStatus::SUPPORTED)
+            ]
+        ];
         return view('admin.contact.edit', [
             'title' => '問い合わせ編集',
             'breadcrumbs' => $breadcrumbs,
             'contact' => $contact,
+            'contact_status_list' => $contact_status_list
         ]);
     }
 
@@ -105,7 +117,7 @@ class ContactController extends BaseController
      */
     public function update(Contactrequest $request, $id)
     {
-        if ($this->contactInterface->update($request, $id)) {
+        if ($this->contact->update($request, $id)) {
             $this->setFlash(__('代理店の新規作成が完了しました。'));
             return redirect(session()->get('admin.contact.list')[0] ?? route('admin.contact.index'));
         }
@@ -121,7 +133,7 @@ class ContactController extends BaseController
      */
     public function destroy($id)
     {
-        if ($this->contactInterface->destroy($id)) {
+        if ($this->contact->destroy($id)) {
             return response()->json([
                 'message' => 'お知らせの削除が完了しました。',
                 'status' => StatusCode::OK

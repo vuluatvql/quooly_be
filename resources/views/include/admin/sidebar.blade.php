@@ -36,6 +36,20 @@
                     </div>
                 </div>
             </div>
+            <div class="simplebar-mask">
+                <div class="simplebar-offset">
+                    <div class="simplebar-content-wrapper">
+                        <div class="simplebar-content">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.contact.index') }}">
+                                    <i class="nav-icon fa fa-user" aria-hidden="true"></i>
+                                    問い合わせ一覧
+                                </a>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {{-- <div class="simplebar-placeholder" style="width: auto; height: 841px;"></div> --}}
         {{-- </div>
         <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">

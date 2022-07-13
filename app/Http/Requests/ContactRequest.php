@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ContactStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -28,7 +29,7 @@ class ContactRequest extends FormRequest
         return [
             'status' => [
                 'required',
-                Rule::in([0, 1])
+                Rule::in([ContactStatus::SUPPORTED, ContactStatus::NOT_SUPPORT])
                 ]
         ];
     }

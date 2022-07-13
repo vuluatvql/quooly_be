@@ -89,8 +89,7 @@
                     >
                     <div class="col-sm-6">
                       <select name="status" class="form-select" v-model="model.status">
-                        <option value=0>未対応</option>
-                        <option value=1>対応済み</option>
+                        <option v-for="status in model.status_list" :value="status.status">{{status.text}}</option>
                       </select>
                     </div>
                   </CRow>
@@ -159,7 +158,8 @@ export default {
           content:this.data.contact.content,
           contact_type:this.data.contact.contact_type,
           status:this.data.contact.status,
-          status_text:this.data.contact.contact_status_text
+          status_text:this.data.contact.contact_status_text,
+          status_list:this.data.contact_status_list
       },
     };
   },
