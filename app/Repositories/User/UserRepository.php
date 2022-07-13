@@ -2,13 +2,16 @@
 
 namespace App\Repositories\User;
 
+use App\Enums\UserRole;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\UserOptional;
 use App\Http\Controllers\BaseController;
 use App\Mail\ForgotPassword;
 use App\Mail\ForgotPassComplete;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository extends BaseController implements UserInterface
 {
@@ -60,10 +63,44 @@ class UserRepository extends BaseController implements UserInterface
     }
     public function store($request)
     {
-        $this->user->name = $request->name;
-        $this->user->email = $request->email;
-        $this->user->password = Hash::make($request->password);
-        return $this->user->save();
+        $user = new $this->user();
+        $user->role_id = UserRole::USER;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->first_name_furigana = $request->first_name_furigana;
+        $user->last_name_furigana = $request->last_name_furigana;
+        $user->email = $request->email;
+        $user->birthday = $request->birthday;
+        $user->password = Hash::make($request->password);
+        $user->phone_number = $request->phone_number;
+        $user->postcode = $request->postcode;
+        $user->prefecture_id = $request->prefecture_id;
+        $user->city = $request->city;
+        $user->address = $request->address;
+        $userOptional = new UserOptional();
+        $userOptional->jobs_type = $request->jobs_type;
+        $userOptional->company_industry_type = $request->company_industry_type;
+        $userOptional->rent_income = $request->rent_income;
+        $userOptional->annual_income = $request->annual_income;
+        $userOptional->user_income = $request->user_income;
+        $userOptional->property_building = $request->property_building;
+        $userOptional->property_kodate_chintai = $request->property_kodate_chintai;
+        $userOptional->favorite_noti_flag = $request->favorite_noti_flag;
+        $userOptional->seminar_noti_flag = $request->seminar_noti_flag;
+        try {
+            if (!$user->save()) {
+                return false;
+            }
+            $userOptional->user_id = $user->id;
+            if (!$userOptional->save()) {
+                return false;
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $exception) {
+        }
+        DB::rollBack();
+        return false;
     }
     public function getById($id)
     {

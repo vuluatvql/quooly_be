@@ -105,7 +105,7 @@ class FavoriesController extends Controller
             ], StatusCode::OK);
         }
         return response()->json([
-            'message' => 'お問い合わせの送信が完了しました。',
+            'message' => 'お気に入りの成功',
             'status_code' => StatusCode::OK
         ], StatusCode::OK);
     }
