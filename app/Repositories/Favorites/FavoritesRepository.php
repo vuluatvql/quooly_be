@@ -30,7 +30,7 @@ class FavoritesRepository extends BaseController implements FavoritesInterface
     public function store($request)
     {
         $favoriteInfo = $this->favorites->where([
-            ['user_id',JWTAuth::user()->id],
+            ['user_id', JWTAuth::user()->id],
             ['bukken_id', $request->bukken_id]
         ])->first();
         if ($favoriteInfo) {

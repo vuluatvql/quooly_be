@@ -45,16 +45,53 @@ class FavoriesController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+
+    /**
+     * @OA\Post(
+     *      path="/api/v1/favorites",
+     *      tags={"Favorites"},
+     *      summary="Favorites store",
+     *      @OA\RequestBody(
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="bukken_id",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Invalid request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error"
+     *      ),
+     *  )
+     **/
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'bukken_id' =>[
+            'bukken_id' => [
                 'required',
                 Rule::in(array_map(function ($e) {
                     return (string)$e;
                 }, bukkenType::getValues()))
-                ]
-            ]);
+            ]
+        ]);
         if ($validator->fails()) {
             return response()->json([
                 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
