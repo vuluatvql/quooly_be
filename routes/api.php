@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\ViewHistoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,5 +30,6 @@ Route::group([
     ], function () {
         Route::get('user_info', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::resource('view_history', ViewHistoryController::class);
     });
 });

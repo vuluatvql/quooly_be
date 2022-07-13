@@ -8,6 +8,8 @@ use App\Repositories\Contact\ContactInterface;
 use App\Repositories\Contact\ContactRepository;
 use App\Repositories\Admin\AdminInterface;
 use App\Repositories\Admin\AdminRepository;
+use App\Repositories\ViewHistory\ViewHistoryInterface;
+use App\Repositories\ViewHistory\ViewHistoryRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AdminInterface::class, AdminRepository::class);
         $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(ContactInterface::class, ContactRepository::class);
+        $this->app->bind(ViewHistoryInterface::class, ViewHistoryRepository::class);
     }
 
     /**
