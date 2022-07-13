@@ -46,4 +46,25 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = ['role_id', 'first_name', 'last_name', 'first_name_furigana', 'last_name_furigana', 'email', 'birthday', 'password', 'phone_number', 'postcode', 'prefecture_id', 'city', 'address', 'reset_password_token', 'reset_password_token_expire', 'remember_token', 'last_login_at', 'created_at', 'updated_at', 'deleted_at'];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'reset_password_token',
+        'reset_password_token_expire',
+        'last_login_at',
+    ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }

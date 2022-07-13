@@ -46,10 +46,8 @@ class Admin extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
         'reset_password_token',
-        'reset_password_token_exprire',
+        'reset_password_token_expire',
         'last_login_at',
-        'change_password_token',
-        'change_email_token_expired'
     ];
 
     public function getJWTIdentifier()

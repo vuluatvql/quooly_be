@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Prefecture;
 use App\Repositories\User\UserInterface;
 use App\Enums\StatusCode;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
@@ -100,9 +102,64 @@ class UserController extends Controller
      *                  example="UNG HOA"
      *              ),
      *              @OA\Property(
-     *                  property="address1",
-     *                  type="string",
-     *                  example="UNG HOA"
+     *                  property="jobs_type",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="company_industry_type",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="rent_income",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="annual_income",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="user_income",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="property_building",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="property_division",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="property_kodate_chintai",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="mail_magazine_flag",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="request_noti_flag",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="favorite_noti_flag",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="seminar_noti_flag",
+     *                  type="integer",
+     *                  example="1"
      *              ),
      *          ),
      *      ),
@@ -129,7 +186,33 @@ class UserController extends Controller
      **/
     public function store(Request $request)
     {
-        dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'first_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
+            'last_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->whereNull('deleted_at')
+            ],
+            'birthday' => 'required|date_format:Y/m/d|after_or_equal:'.Carbon::now()->format('Y/m/d'),
+            'content' => 'required|max:10000',
+            'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
+            'phone_number' => 'nullable|regex:/^((0(\d-\d{4}-\d{4}))|(0(\d{3}-\d{2}-\d{4}))|(0(\d{2}-\d{3}-\d{4}))|((070|080|090|050)(-\d{4}-\d{4})))$/',
+            'postcode' => 'nullable|max:10',
+            'prefecture_id' => [
+                'nullable',
+                Rule::in(Prefecture::pluck('id'))
+            ],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'status_code' => StatusCode::BAD_REQUEST
+            ], StatusCode::OK);
+        }
     }
 
     /**

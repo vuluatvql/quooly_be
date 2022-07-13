@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,10 +21,8 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('create', [ContactController::class, 'store']);
-//    Route::get('contact/{id}', [ContactController::class, 'show']);
-//    Route::get('delete/{id}', [ContactController::class, 'destroy']);
     Route::resource('contact', ContactController::class);
+    Route::resource('user', UserController::class);
     Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],
     ], function () {

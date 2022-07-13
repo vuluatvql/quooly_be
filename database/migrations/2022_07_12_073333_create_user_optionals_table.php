@@ -15,8 +15,8 @@ return new class extends Migration {
         Schema::create('user_optionals', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->comment('ユーザーID');
-            $table->integer('jobs')->nullable()->comment('職業');
-            $table->integer('company_industry')->nullable()->comment('業種');
+            $table->integer('jobs_type')->nullable()->comment('職業');
+            $table->integer('company_industry_type')->nullable()->comment('業種');
             $table->integer('rent_income')->nullable()->default(0)->comment('家賃収入');
             $table->integer('annual_income')->nullable()->default(0)->comment('世帯年収（家賃収入込む）');
             $table->integer('user_income')->nullable()->default(0)->comment('自己資金');
