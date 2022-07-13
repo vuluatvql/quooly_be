@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ViewHistoryController;
 use App\Http\Controllers\Api\FavoriesController;
+use App\Http\Controllers\Api\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +26,8 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::resource('contact', ContactController::class);
     Route::resource('user', UserController::class);
-    Route::post('forgot_password', [AuthController::class, 'forgotPassword']);
+    Route::resource('forgot_password', ForgotPasswordController::class);
+
     Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],
     ], function () {
