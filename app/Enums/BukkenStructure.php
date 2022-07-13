@@ -4,30 +4,30 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-final class BukkenType extends Enum
+final class BukkenStructure extends Enum
 {
-    const APARTMENT = 1;
-    const BUILDING_APARTMENT = 2;
-    const DETACHED_HOURSE = 3;
-    const SELECTIONAL_APARTMENT = 4;
-    const LAND = 5;
+    const RC = 1;
+    const STEEL_FRAME = 2;
+    const STEEL_STRUCTURE = 3;
+    const WOODEN = 4;
+    const DONT_WORRY = 5;
     public static function getDescription($value): string
     {
         switch ($value) {
-            case self::APARTMENT:
-                return '1棟マンション';
+            case self::RC:
+                return 'RC造（SRC造を含む）';
                 break;
-            case self::BUILDING_APARTMENT:
-                return '1棟アパート';
+            case self::STEEL_FRAME:
+                return '鉄骨造';
                 break;
-            case self::DETACHED_HOURSE:
-                return '戸建';
+            case self::STEEL_STRUCTURE:
+                return '軽量鉄骨造';
                 break;
-            case self::SELECTIONAL_APARTMENT:
-                return '区分マンション';
+            case self::WOODEN:
+                return '木造';
                 break;
-            case self::LAND:
-                return '土地';
+            case self::DONT_WORRY:
+                return 'こだわらない';
                 break;
             default:
                 return "";

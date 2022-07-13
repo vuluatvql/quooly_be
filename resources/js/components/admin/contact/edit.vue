@@ -22,78 +22,77 @@
                 </CCardHeader>
                 <CCardBody>
                   <CRow class="mb-2">
-                    <div class="col-sm-3" align="right"
-                      >お名前 (姓):
-                    </div>
+                    <div class="col-sm-3" align="right">お名前 (姓):</div>
                     <div class="col-sm-6">
-                      {{model.first_name}}
+                      {{ model.first_name }}
                     </div>
                   </CRow>
                   <CRow class="mb-2">
-                    <div class="col-sm-3" align="right"
-                      >お名前 (名):
-                    </div>
+                    <div class="col-sm-3" align="right">お名前 (名):</div>
                     <div class="col-sm-6">
-                      {{model.last_name}}
+                      {{ model.last_name }}
                     </div>
                   </CRow>
                   <CRow class="mb-2">
-                    <div class="col-sm-3" align="right"
-                      >ふりがな (姓):
-                    </div>
+                    <div class="col-sm-3" align="right">ふりがな (姓):</div>
                     <div class="col-sm-6">
-                      {{model.first_name_furigana}}
+                      {{ model.first_name_furigana }}
                     </div>
                   </CRow>
 
                   <CRow class="mb-2">
-                    <div class="col-sm-3" align="right"
-                      >ふりがな (名):
-                    </div>
+                    <div class="col-sm-3" align="right">ふりがな (名):</div>
                     <div class="col-sm-6">
-                      {{model.last_name_furigana}}
+                      {{ model.last_name_furigana }}
                     </div>
                   </CRow>
 
                   <CRow class="mb-2">
-                    <div class="col-sm-3" align="right"
-                      >メールアドレス:
-                    </div>
+                    <div class="col-sm-3" align="right">メールアドレス:</div>
                     <div class="col-sm-6">
-                      {{model.email}}
+                      {{ model.email }}
                     </div>
                   </CRow>
-                  
+
                   <CRow class="mb-2">
-                    <div class="col-sm-3" align="right"
-                      >問い合わせ内容:
-                    </div>
-                    <nl2br :text="model.content" class="col-sm-6 content-break" style="margin-bottom: 0%;"/>
+                    <div class="col-sm-3" align="right">問い合わせ内容:</div>
+                    <nl2br
+                      :text="model.content"
+                      class="col-sm-6 content-break"
+                      style="margin-bottom: 0%"
+                    />
                     <!-- <div class="col-sm-6">
                       {{model.content}}
                     </div> -->
                   </CRow>
 
                   <CRow class="mb-2">
-                    <div class="col-sm-3" align="right"
-                      >連絡先タイプ:
-                    </div>
+                    <div class="col-sm-3" align="right">連絡先タイプ:</div>
                     <div class="col-sm-6">
-                      {{model.contact_type}}
+                      {{ model.contact_type }}
                     </div>
                   </CRow>
 
                   <CRow class="mb-2">
                     <CFormLabel class="col-sm-3 lbl-input" require
-                      >状態:</CFormLabel
+                      >ステータス:</CFormLabel
                     >
                     <div class="col-sm-6">
-                      <select name="status" class="form-select" v-model="model.status">
-                        <option v-for="status in model.status_list" :value="status.status">{{status.text}}</option>
+                      <select
+                        name="status"
+                        class="form-select"
+                        v-model="model.status"
+                      >
+                        <option
+                          v-for="status in model.status_list"
+                          :value="status.status"
+                          :key="status.status"
+                        >
+                          {{ status.text }}
+                        </option>
                       </select>
                     </div>
                   </CRow>
-                  
                 </CCardBody>
                 <CCardFooter>
                   <div class="col-md-12 text-center btn-box">
@@ -127,7 +126,7 @@ import {
 import { localize } from "@vee-validate/i18n";
 import * as rules from "@vee-validate/rules";
 import $ from "jquery";
-import Nl2br from 'vue3-nl2br';
+import Nl2br from "vue3-nl2br";
 
 export default {
   setup() {
@@ -142,7 +141,7 @@ export default {
     VeeForm,
     Field,
     ErrorMessage,
-    Nl2br
+    Nl2br,
   },
   props: ["data"],
   data: function () {
@@ -150,16 +149,16 @@ export default {
       csrfToken: Laravel.csrfToken,
       flagShowLoader: false,
       model: {
-          first_name:this.data.contact.first_name,
-          last_name:this.data.contact.last_name,
-          first_name_furigana:this.data.contact.first_name_furigana,
-          last_name_furigana:this.data.contact.last_name_furigana,
-          email:this.data.contact.email,
-          content:this.data.contact.content,
-          contact_type:this.data.contact.contact_type,
-          status:this.data.contact.status,
-          status_text:this.data.contact.contact_status_text,
-          status_list:this.data.contactStatusList
+        first_name: this.data.contact.first_name,
+        last_name: this.data.contact.last_name,
+        first_name_furigana: this.data.contact.first_name_furigana,
+        last_name_furigana: this.data.contact.last_name_furigana,
+        email: this.data.contact.email,
+        content: this.data.contact.content,
+        contact_type: this.data.contact.contact_type,
+        status: this.data.contact.status,
+        status_text: this.data.contact.contact_status_text,
+        status_list: this.data.contactStatusList,
       },
     };
   },
@@ -169,7 +168,7 @@ export default {
         fields: {
           status: {
             required: "問い合わせ名を入力してください。",
-          }
+          },
         },
       },
     };

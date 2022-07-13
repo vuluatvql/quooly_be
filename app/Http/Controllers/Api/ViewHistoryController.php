@@ -40,7 +40,7 @@ class ViewHistoryController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/view_history",
+     *      path="/api/v1/view-history",
      *      tags={"ViewHistory"},
      *      summary="ViewHistory store",
      *      @OA\RequestBody(
@@ -79,10 +79,7 @@ class ViewHistoryController extends Controller
         $validator = Validator::make($request->all(), [
             'bukken_id' => [
                 'required',
-                Rule::in([
-                    bukkenType::APARTMENT, bukkenType::BUILDING_APARTMENT,
-                    bukkenType::DETACHED_HOURSE, bukkenType::LAND, bukkenType::SELECTIONAL_APARTMENT
-                ])
+                Rule::in(bukkenType::getValues())
             ]
         ]);
         if ($validator->fails()) {
