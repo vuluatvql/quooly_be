@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    private $user;
+    public function __construct(UserInterface $user)
+    {
+        $this->user = $user;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,7 +45,7 @@ class UserController extends Controller
      *  @OA\Post(
      *      path="/api/v1/user",
      *      tags={"User"},
-     *      summary="Contact user",
+     *      summary="Register User",
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
@@ -67,7 +72,7 @@ class UserController extends Controller
      *              @OA\Property(
      *                  property="email",
      *                  type="string",
-     *                  example="nguyenvana@gmail.com"
+     *                  example="user@gmail.com"
      *              ),
      *              @OA\Property(
      *                  property="birthday",
@@ -145,16 +150,6 @@ class UserController extends Controller
      *                  example="1"
      *              ),
      *              @OA\Property(
-     *                  property="mail_magazine_flag",
-     *                  type="integer",
-     *                  example="1"
-     *              ),
-     *              @OA\Property(
-     *                  property="request_noti_flag",
-     *                  type="integer",
-     *                  example="1"
-     *              ),
-     *              @OA\Property(
      *                  property="favorite_noti_flag",
      *                  type="integer",
      *                  example="1"
@@ -226,14 +221,6 @@ class UserController extends Controller
             'property_building' => 'nullable|integer',
             'property_division' => 'nullable|integer',
             'property_kodate_chintai' => 'nullable|integer',
-            'mail_magazine_flag' => [
-                'required',
-                Rule::in(MailNoti::getValues())
-            ],
-            'request_noti_flag' => [
-                'required',
-                Rule::in(MailNoti::getValues())
-            ],
             'favorite_noti_flag' => [
                 'required',
                 Rule::in(MailNoti::getValues())
@@ -261,6 +248,16 @@ class UserController extends Controller
                 ], StatusCode::OK);
             }
         }
+        if (!$this->user->store($request)) {
+            return response()->json([
+                'message' => 'エラーが発生しました。',
+                'status_code' => StatusCode::INTERNAL_ERR
+            ], StatusCode::OK);
+        }
+        return response()->json([
+            'message' => 'ユーザーの新規作成が完了しました。',
+            'status_code' => StatusCode::OK
+        ], StatusCode::OK);
     }
 
     /**

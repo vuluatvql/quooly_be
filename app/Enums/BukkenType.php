@@ -15,7 +15,7 @@ final class BukkenType extends Enum
     {
         switch ($value) {
             case self::APARTMENT:
-                return '1棟マンション';
+                return ' 1棟マンション';
                 break;
             case self::BUILDING_APARTMENT:
                 return '1棟アパート';
