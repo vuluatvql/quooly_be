@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\UpdateViewHistoryRequest;
-use App\Models\ViewHistory;
 use App\Repositories\ViewHistory\ViewHistoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Enums\bukkenType;
 use App\Enums\StatusCode;
 use App\Http\Requests\ViewHistoryRequest;
 
