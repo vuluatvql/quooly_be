@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\bukkenType;
+use App\Enums\BukkenType;
 use App\Enums\StatusCode;
 use App\Repositories\Favorites\FavoritesInterface;
 use Illuminate\Http\Request;
@@ -89,7 +89,7 @@ class FavoriesController extends Controller
                 'required',
                 Rule::in(array_map(function ($e) {
                     return (string)$e;
-                }, bukkenType::getValues()))
+                }, bukkenType::geBValues()))
             ]
         ]);
         if ($validator->fails()) {

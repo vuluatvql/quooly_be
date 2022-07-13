@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\bukkenType;
+use App\Enums\BukkenType;
 use App\Repositories\ViewHistory\ViewHistoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -79,7 +79,7 @@ class ViewHistoryController extends Controller
         $validator = Validator::make($request->all(), [
             'bukken_id' => [
                 'required',
-                Rule::in(bukkenType::getValues())
+                Rule::in(BukkenType::getValues())
             ]
         ]);
         if ($validator->fails()) {
@@ -88,7 +88,7 @@ class ViewHistoryController extends Controller
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }
-        
+
         if($this->viewHistory->store($request)){
             return response()->json([
                 'message' => 'より多くの成功の歴史',
@@ -109,7 +109,7 @@ class ViewHistoryController extends Controller
      */
     public function show(Request $request)
     {
-        
+
     }
 
     /**
