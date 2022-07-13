@@ -25,6 +25,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::resource('contact', ContactController::class);
     Route::resource('user', UserController::class);
+    Route::post('forgot_password', [AuthController::class, 'forgotPassword']);
     Route::group([
         'middleware' => ['jwt.verify', 'auth.jwt'],
     ], function () {

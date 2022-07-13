@@ -2,6 +2,7 @@
 
 namespace App\Repositories\User;
 
+use App\Enums\UserRole;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Http\Controllers\BaseController;
@@ -107,10 +108,24 @@ class UserRepository extends BaseController implements UserInterface
         if (!$account->save()) {
             return false;
         }
+        switch ($account->role_id)
+        {
+            case UserRole::USER:
+                $link = env('SITE_USER_URL') . '/password_reset/' . $account->reset_password_token;
+                break;
+
+            case UserRole::BESINESS:
+                $link = env('SITE_BUSINESS_URL') . '/password_reset/' . $account->reset_password_token;
+                break;
+
+            default:
+                $link = route('password_reset.show', $account->reset_password_token);
+                break;
+        }
         $mailContents = [
             'data' => [
                 'name' => $account->name,
-                'link' => route('password_reset.show', $account->reset_password_token)
+                'link' => $link
             ]
         ];
         Mail::to($account->email)->send(new ForgotPassword($mailContents));
