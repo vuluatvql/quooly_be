@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
-
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\StatusCode;
 use App\Enums\UserRole;
@@ -22,8 +21,8 @@ class ForgotPasswordController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/forgot-password",
-     *      tags={"Login"},
+     *      path="/api/v1/user/forgot-password",
+     *      tags={"User Login"},
      *      summary="Forgot password",
      *      @OA\RequestBody(
      *          @OA\JsonContent(

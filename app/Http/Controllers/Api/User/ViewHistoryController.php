@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\BukkenType;
 use App\Repositories\ViewHistory\ViewHistoryInterface;
@@ -40,8 +40,8 @@ class ViewHistoryController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/view-history",
-     *      tags={"ViewHistory"},
+     *      path="/api/v1/user/view-history",
+     *      tags={"User ViewHistory"},
      *      summary="ViewHistory store",
      *      @OA\RequestBody(
      *          @OA\JsonContent(

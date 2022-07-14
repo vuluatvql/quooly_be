@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Contact;
 
+use App\Enums\ContactType;
 use App\Models\Contact;
 use App\Http\Controllers\BaseController;
 use App\Repositories\Contact\ContactInterface;
@@ -53,7 +54,7 @@ class ContactRepository extends BaseController implements ContactInterface
         $this->contact->content = $request->content;
         $this->contact->contact_type = $request->contact_type;
         if (JWTAuth::user()) {
-            $this->contact->{$request->isUser ? 'user_id' : 'business_user_id'} =  JWTAuth::user()->id;
+            $this->contact->{$request->contact_type == ContactType::USER ? 'user_id' : 'business_user_id'} =  JWTAuth::user()->id;
         }
 
         return $this->contact->save();

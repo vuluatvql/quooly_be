@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers\Api\User;
 
+use App\Enums\UserRole;
+use App\Enums\MailNoti;
+use App\Enums\IndustryType;
+use App\Enums\JobType;
+use App\Models\Prefecture;
+use App\Repositories\User\UserInterface;
 use App\Enums\StatusCode;
-use App\Enums\ContactType;
-use App\Repositories\Contact\ContactInterface;
-use Illuminate\Routing\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-class ContactController extends Controller
+class RegisterController extends Controller
 {
+    private $user;
+    public function __construct(UserInterface $user)
+    {
+        $this->user = $user;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    private $contact;
-
-    public function __construct(ContactInterface $contact)
-    {
-        $this->contact = $contact;
-    }
-
     public function index()
     {
         //
@@ -41,41 +44,46 @@ class ContactController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/user/contact",
-     *      tags={"User Contact"},
-     *      summary="Contact store",
+     *      path="/api/v1/user/register",
+     *      tags={"User Register"},
+     *      summary="Register User",
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
      *                  property="first_name",
      *                  type="string",
-     *                  example="nguyen"
+     *                  example="nguyen van"
      *              ),
      *              @OA\Property(
      *                  property="last_name",
      *                  type="string",
-     *                  example="xxx"
+     *                  example="A"
      *              ),
      *              @OA\Property(
      *                  property="first_name_furigana",
      *                  type="string",
-     *                  example="お"
+     *                  example="ル"
      *              ),
      *              @OA\Property(
      *                  property="last_name_furigana",
      *                  type="string",
-     *                  example="ス"
+     *                  example="ビ"
      *              ),
      *              @OA\Property(
      *                  property="email",
      *                  type="string",
-     *                  example="xxx@gmail.com"
+     *                  example="user@gmail.com"
      *              ),
      *              @OA\Property(
-     *                  property="content",
+     *                  property="re_email",
      *                  type="string",
-     *                  example="abc"
+     *                  example="user@gmail.com"
+     *              ),
+     *              @OA\Property(
+     *                  property="phone_number",
+     *                  type="string",
+     *                  example="01-1234-5678"
      *              ),
      *          ),
      *      ),
@@ -107,25 +115,40 @@ class ContactController extends Controller
             'last_name' => 'required|max:255',
             'first_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
             'last_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
-            'email' => 'required|max:255|email',
-            'content' => 'required|max:10000',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->whereNull('deleted_at')
+            ],
+            're_email' => 'required|email|max:255|same:email',
+            'phone_number' => 'required',
         ]);
-        $request->contact_type = ContactType::USER;
         if ($validator->fails()) {
             return response()->json([
                 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }
-
-        if (!$this->contact->store($request)) {
+        $request->role_id = UserRole::USER;
+        $regexTelephone = "/^0(\d-\d{4}-\d{4})$/";
+        $regexTelephone1 = "/^0(\d{3}-\d{2}-\d{4})$/";
+        $regexTelephone2 = "/^0(\d{2}-\d{3}-\d{4})$/";
+        $regexTelephone3 = "/^(070|080|090|050)(-\d{4}-\d{4})$/";
+        if (!preg_match($regexTelephone, $request->phone_number) && !preg_match($regexTelephone1, $request->phone_number) && !preg_match($regexTelephone2, $request->phone_number) && !preg_match($regexTelephone3, $request->phone_number)) {
+            return response()->json([
+                'message' => 'The last name phone_number format is invalid.',
+                'status_code' => StatusCode::BAD_REQUEST
+            ], StatusCode::OK);
+        }
+        if (!$this->user->register($request)) {
             return response()->json([
                 'message' => 'エラーが発生しました。',
                 'status_code' => StatusCode::INTERNAL_ERR
             ], StatusCode::OK);
         }
         return response()->json([
-            'message' => 'お問い合わせの送信が完了しました。',
+            'message' => 'ユーザーの新規作成が完了しました。',
             'status_code' => StatusCode::OK
         ], StatusCode::OK);
     }
@@ -133,18 +156,18 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return $this->contactInterface->getById($id);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -155,8 +178,8 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -167,11 +190,11 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy($id)
     {
-        $this->contactInterface->destroy();
+        //
     }
 }

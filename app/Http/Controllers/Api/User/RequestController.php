@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\BukkenStructure;
 use App\Enums\BukkenType;
@@ -14,10 +14,10 @@ use Illuminate\Validation\Rule;
 
 class RequestController extends Controller
 {
-    private $requestRepo;
-    public function __construct(RequestInterface $requestRepo)
+    private $requestInf;
+    public function __construct(RequestInterface $requestInf)
     {
-        $this->requestRepo = $requestRepo;
+        $this->requestInf = $requestInf;
     }
     /**
      * Display a listing of the resource.
@@ -41,9 +41,9 @@ class RequestController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/request",
-     *      tags={"Request"},
-     *      summary="Add request",
+     *      path="/api/v1/user/request",
+     *      tags={"User Request"},
+     *      summary="store request",
      *      security={{"BearerAuth":{}}},
      *      @OA\RequestBody(
      *          @OA\JsonContent(
@@ -55,7 +55,7 @@ class RequestController extends Controller
      *              ),
      *              @OA\Property(
      *                  property="prefecture_id",
-     *                  type="int",
+     *                  type="integer",
      *                  example=1
      *              ),
      *              @OA\Property(
@@ -65,27 +65,27 @@ class RequestController extends Controller
      *              ),
      *              @OA\Property(
      *                  property="price_lower",
-     *                  type="int",
+     *                  type="integer",
      *                  example=111111
      *              ),
      *              @OA\Property(
      *                  property="price_upper",
-     *                  type="int",
+     *                  type="integer",
      *                  example=1111111
      *              ),
      *              @OA\Property(
      *                  property="revenue_yield",
-     *                  type="int",
+     *                  type="integer",
      *                  example=111
      *              ),
      *              @OA\Property(
      *                  property="construction_year",
-     *                  type="int",
+     *                  type="integer",
      *                  example=1999
      *              ),
      *              @OA\Property(
      *                  property="walkrange",
-     *                  type="int",
+     *                  type="integer",
      *                  example=111
      *              ),
      *              @OA\Property(
@@ -135,7 +135,7 @@ class RequestController extends Controller
      *          description="Internal Server Error"
      *      ),
      *  )
-     * 
+     *
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -144,48 +144,44 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->all();
-        // $requestData['id'] = $requestData['user_id'];
         $validator = Validator::make($requestData, [
             'name' => 'required|max:255',
-            // 'id' => [
-            //     'required',
-            //     'integer',
-            //     Rule::exists('users')->where(function ($query) use ($request) {
-            //         return $query->whereNull('deleted_at');
-            //     })
-            // ],
             'prefecture_id' => [
                 'required',
                 'integer',
                 Rule::in(Prefecture::pluck('id'))
             ],
-            'city' => 'nullable|max:255|string',
+            'city' => 'required|max:255|string',
             'price_lower' => 'required|integer',
             'price_upper' => 'required|integer',
             'revenue_yield' => 'required|integer',
             'construction_year' => 'required|integer',
             'walkrange' => 'required|integer',
-            'comment' => 'nullable|string|max:5000',
-            'bukken_type' => [
+            'comment' => 'required|string|max:5000',
+            'bukken_type' => 'array',
+            'bukken_type.*' => [
                 'required',
-                'array',
+                'integer',
                 Rule::in(BukkenType::getValues())
             ],
             'bukken_structures' => [
-                'required',
+                'present',
                 'array',
+                'min:1'
+            ],
+            'bukken_structures.*' => [
+                'required',
+                'integer',
                 Rule::in(BukkenStructure::getValues())
             ],
         ]);
         if ($validator->fails()) {
             return response()->json([
-                // 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
-                'message' => $validator->errors(),
+                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }
-        $saved = $this->requestRepo->store($request);
-        if($saved){
+        if($this->requestInf->store($request)){
             return response()->json([
                 "message" => "成功",
                 "status_code" => StatusCode::OK

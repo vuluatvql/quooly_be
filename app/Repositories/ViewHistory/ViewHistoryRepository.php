@@ -4,7 +4,7 @@ namespace App\Repositories\ViewHistory;
 
 use App\Http\Controllers\BaseController;
 use App\Models\ViewHistory;
-use Illuminate\Support\Facades\Auth;
+use JWTAuth;
 
 class ViewHistoryRepository extends BaseController implements ViewHistoryInterface
 {
@@ -16,22 +16,22 @@ class ViewHistoryRepository extends BaseController implements ViewHistoryInterfa
 
     public function get($request)
     {
-        
+
     }
 
     public function destroy($id)
     {
-       
+
     }
-    
+
     public function store($request)
     {
         $history = $this->viewHistory->where('bukken_id', $request['bukken_id'])
-            ->where('user_id', Auth::user()->id)
+            ->where('user_id', JWTAuth::user()->id)
             ->first();
         if (empty($history)) {
             $this->viewHistory->bukken_id = $request['bukken_id'];
-            $this->viewHistory->user_id = Auth::user()->id;
+            $this->viewHistory->user_id = JWTAuth::user()->id;
             $this->viewHistory->view_count = 1;
             return $this->viewHistory->save();
         }
@@ -39,18 +39,18 @@ class ViewHistoryRepository extends BaseController implements ViewHistoryInterfa
     }
     public function getById($id)
     {
-        
+
     }
     public function update($request, $id)
     {
-        
+
     }
     public function increaseCount(ViewHistory $viewHistory)
     {
         if (empty($viewHistory)) {
             return null;
         }
-        $viewHistory->view_count += 1;
+        $viewHistory->view_count++;
         return $viewHistory->save();
     }
 }
