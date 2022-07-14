@@ -17,4 +17,5 @@ interface UserInterface
     public function generalResetPass($request);
     public function getUserByToken($token);
     public function updatePasswordByToken($request, $token);
+    public function changePassword($request);
 }

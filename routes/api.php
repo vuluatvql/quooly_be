@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ChangePasswordController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ViewHistoryController;
@@ -31,10 +32,11 @@ Route::group([
     Route::resource('reset-password', ResetPasswordController::class);
 
     Route::group([
-        'middleware' => ['jwt.verify', 'auth.jwt'],
+        'middleware' => ['jwt.verify','auth.jwt'],
     ], function () {
         Route::resource('favorites', FavoriesController::class);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::resource('view-history', ViewHistoryController::class);
+        Route::resource('change-password', ChangePasswordController::class);
     });
 });
