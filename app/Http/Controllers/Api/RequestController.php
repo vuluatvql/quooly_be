@@ -54,11 +54,6 @@ class RequestController extends Controller
      *                  example="aaaaaaaaaa"
      *              ),
      *              @OA\Property(
-     *                  property="user_id",
-     *                  type="int",
-     *                  example=1
-     *              ),
-     *              @OA\Property(
      *                  property="prefecture_id",
      *                  type="int",
      *                  example=1
@@ -149,16 +144,16 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         $requestData = $request->all();
-        $requestData['id'] = $requestData['user_id'];
+        // $requestData['id'] = $requestData['user_id'];
         $validator = Validator::make($requestData, [
             'name' => 'required|max:255',
-            'id' => [
-                'required',
-                'integer',
-                Rule::exists('users')->where(function ($query) use ($request) {
-                    return $query->whereNull('deleted_at');
-                })
-            ],
+            // 'id' => [
+            //     'required',
+            //     'integer',
+            //     Rule::exists('users')->where(function ($query) use ($request) {
+            //         return $query->whereNull('deleted_at');
+            //     })
+            // ],
             'prefecture_id' => [
                 'required',
                 'integer',

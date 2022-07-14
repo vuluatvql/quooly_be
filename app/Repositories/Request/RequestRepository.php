@@ -9,6 +9,7 @@ use App\Models\RequestBukkenStructure;
 use App\Models\RequestBukkenType;
 use App\Repositories\Request\RequestInterface;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RequestRepository extends BaseController implements RequestInterface
@@ -54,7 +55,7 @@ class RequestRepository extends BaseController implements RequestInterface
     {
         $requestModel = new $this->request();
         $requestModel->name = $request->name;
-        $requestModel->user_id = $request->user_id;
+        $requestModel->user_id = Auth::user()->id;
         $requestModel->prefecture_id = $request->prefecture_id;
         $requestModel->city = $request->city;
         $requestModel->price_lower = $request->price_lower;
