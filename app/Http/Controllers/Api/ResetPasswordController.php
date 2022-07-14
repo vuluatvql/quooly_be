@@ -67,7 +67,7 @@ class ResetPasswordController extends Controller
     }
 
     /**
-     *  @OA\PUT(
+     *  @OA\Put(
      *      path="/api/v1/reset-password/{token}",
      *      tags={"Login"},
      *      summary="reset password",

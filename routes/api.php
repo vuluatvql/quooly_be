@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\FavoriesController;
 use App\Http\Controllers\Api\ResetPasswordController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\RequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +42,7 @@ Route::group([
         Route::resource('favorites', FavoriesController::class);
         Route::resource('view-history', ViewHistoryController::class);
         Route::resource('profile', ProfileController::class);
-
+        Route::resource('request', RequestController::class);
     });
 });
 // Route::group([
