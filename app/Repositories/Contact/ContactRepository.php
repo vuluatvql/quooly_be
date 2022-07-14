@@ -53,7 +53,7 @@ class ContactRepository extends BaseController implements ContactInterface
         $this->contact->content = $request->content;
         $this->contact->contact_type = $request->contact_type;
         if (JWTAuth::user()) {
-            $this->contact->user_id = JWTAuth::user()->id;
+            $this->contact->{$request->isUser ? 'user_id' : 'business_user_id'} =  JWTAuth::user()->id;
         }
 
         return $this->contact->save();

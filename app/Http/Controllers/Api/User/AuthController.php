@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Models\KonamiUser;
 use App\Enums\StatusCode;
@@ -14,6 +14,8 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
 
+/** @OA\Info(title="Quooli App API", version="1.0.0")
+ * @OA\SecurityScheme(securityScheme="bearerAuth", type="http", scheme="bearer", bearerFormat="JWT")*/
 class AuthController extends Controller
 {
     private $user;
@@ -24,8 +26,8 @@ class AuthController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/login",
-     *      tags={"Login"},
+     *      path="/api/v1/user/login",
+     *      tags={"User Login"},
      *      summary="Login",
      *      @OA\RequestBody(
      *          @OA\JsonContent(
@@ -101,8 +103,8 @@ class AuthController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/logout",
-     *      tags={"Login"},
+     *      path="/api/v1/user/logout",
+     *      tags={"User Login"},
      *      summary="logout",
      *      security={{"bearerAuth":{}}},
      *  @OA\Response(
@@ -132,34 +134,32 @@ class AuthController extends Controller
         return response()->json(['message' => 'ユーザーが正常にログアウトしました', 'status_code' => StatusCode::OK], StatusCode::OK);
     }
 
-    public function refresh()
-    {
-        try {
-            if (JWTAuth::getToken()) {
-                JWTAuth::checkOrFail();
-            }
-            JWTAuth::authenticate();
-            return response()->json([
-                'status_code' => StatusCode::OK,
-                'token' => JWTAuth::refresh(),
-            ], StatusCode::OK);
-        } catch (JWTException $e) {
-            try {
-                JWTAuth::setToken(JWTAuth::refresh(true, true));
-                JWTAuth::authenticate();
-                return response()->json([
-                    'status_code' => StatusCode::OK,
-                    'token' => JWTAuth::refresh(),
-                ], StatusCode::OK);
-            } catch (\Throwable $th) {
-                return response()->json([
-                    // 'user' => $user->profile(),
-                    'status_code' => StatusCode::FORBIDDEN,
-                    'message' => 'トークンの有効期限が切れており、ファイルで更新できなくなりました',
-                ], StatusCode::FORBIDDEN);
-            }
-        }
-    }
-
-
+    // public function refresh()
+    // {
+    //     try {
+    //         if (JWTAuth::getToken()) {
+    //             JWTAuth::checkOrFail();
+    //         }
+    //         JWTAuth::authenticate();
+    //         return response()->json([
+    //             'status_code' => StatusCode::OK,
+    //             'token' => JWTAuth::refresh(),
+    //         ], StatusCode::OK);
+    //     } catch (JWTException $e) {
+    //         try {
+    //             JWTAuth::setToken(JWTAuth::refresh(true, true));
+    //             JWTAuth::authenticate();
+    //             return response()->json([
+    //                 'status_code' => StatusCode::OK,
+    //                 'token' => JWTAuth::refresh(),
+    //             ], StatusCode::OK);
+    //         } catch (\Throwable $th) {
+    //             return response()->json([
+    //                 // 'user' => $user->profile(),
+    //                 'status_code' => StatusCode::FORBIDDEN,
+    //                 'message' => 'トークンの有効期限が切れており、ファイルで更新できなくなりました',
+    //             ], StatusCode::FORBIDDEN);
+    //         }
+    //     }
+    // }
 }

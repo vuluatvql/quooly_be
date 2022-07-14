@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\StatusCode;
 use App\Enums\ContactType;
@@ -41,8 +41,8 @@ class ContactController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/contact",
-     *      tags={"Contact"},
+     *      path="/api/v1/user/contact",
+     *      tags={"User Contact"},
      *      summary="Contact store",
      *      @OA\RequestBody(
      *          @OA\JsonContent(
@@ -121,6 +121,7 @@ class ContactController extends Controller
                 }, ContactType::getValues()))
             ]
         ]);
+        $request->isUser = true;
         if ($validator->fails()) {
             return response()->json([
                 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),

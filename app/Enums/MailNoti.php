@@ -12,10 +12,10 @@ final class MailNoti extends Enum
     {
         switch ($value) {
             case self::UN_PUBLISH:
-                return '無効';
+                return '受け取る';
                 break;
             case self::PUBLISH:
-                return '有効';
+                return '受け取らない';
                 break;
             default:
                 return "";
