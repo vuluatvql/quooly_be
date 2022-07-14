@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Enums\MailNoti;
 use App\Enums\IndustryType;
 use App\Enums\JobType;
@@ -13,39 +14,23 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use JWTAuth;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
     private $user;
+
     public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     *  @OA\Post(
-     *      path="/api/v1/user",
-     *      tags={"User"},
-     *      summary="Register User",
+     * @OA\Put(
+     *      path="/api/v1/profile/{id}",
+     *      tags={"Profile"},
+     *      summary="Update profile user",
+     *      security={{"bearerAuth":{}}},
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
@@ -182,8 +167,9 @@ class UserController extends Controller
      *      ),
      *  )
      **/
-    public function store(Request $request)
+    public function update(Request $request, $id)
     {
+        $currentUser = JWTAuth::toUser();
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
@@ -193,10 +179,10 @@ class UserController extends Controller
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('users')->whereNull('deleted_at')
+                Rule::unique('users')->whereNull('deleted_at')->ignore($currentUser->id)
             ],
             'birthday' => 'required|date_format:Y/m/d|before_or_equal:' . Carbon::now()->format('Y/m/d'),
-            'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
+            'password' => 'max:16|min:8|regex:/^[A-Za-z0-9]*$/',
             'phone_number' => 'nullable',
             'postcode' => 'nullable|max:10',
             'prefecture_id' => [
@@ -248,60 +234,18 @@ class UserController extends Controller
                 ], StatusCode::OK);
             }
         }
-        if (!$this->user->store($request)) {
+
+        if (!$this->user->update($request, $currentUser->id)) {
             return response()->json([
                 'message' => 'エラーが発生しました。',
                 'status_code' => StatusCode::INTERNAL_ERR
             ], StatusCode::OK);
         }
         return response()->json([
-            'message' => 'ユーザーの新規作成が完了しました。',
+            'message' => 'ユーザーの変更が完了しました。',
             'status_code' => StatusCode::OK
         ], StatusCode::OK);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

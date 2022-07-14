@@ -118,7 +118,7 @@ class UserRepository extends BaseController implements UserInterface
         $userInfo->last_name_furigana = $request->last_name_furigana;
         $userInfo->email = $request->email;
         $userInfo->birthday = $request->birthday;
-        if (isset($request->password))
+        if (!empty($request->password))
             $userInfo->password = Hash::make($request->password);
         $userInfo->phone_number = $request->phone_number;
         $userInfo->postcode = $request->postcode;
