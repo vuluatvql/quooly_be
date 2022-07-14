@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property integer $id
@@ -70,6 +71,15 @@ class User extends Authenticatable implements JWTSubject
 
     public function userOptional()
     {
-        return $this->hasOne(UserOptional::class, 'id', 'user_id');
+        return $this->hasOne(UserOptional::class, 'user_id', 'id');
+    }
+    public $sortable = ['name', 'furigana_name'];
+    public function nameSortable($query, $direction)
+    {
+        return $query->orderBy(DB::raw('CONCAT(last_name, first_name)'), $direction);
+    }
+    public function furiganaNameSortable($query, $direction)
+    {
+        return $query->orderBy(DB::raw('CONCAT(last_name_furigana, first_name_furigana)'), $direction);
     }
 }

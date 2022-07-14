@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 
 class UserController extends BaseController
 {
-    private $userInterface;
-    public function __construct(UserInterface $userInterface)
+    private $user;
+    public function __construct(UserInterface $user)
     {
-        $this->userInterface = $userInterface;
+        $this->user = $user;
     }
     /**
      * Display a listing of the resource.
@@ -24,15 +24,13 @@ class UserController extends BaseController
     public function index(Request $request)
     {
         $breadcrumbs = [
-            'ユーザー一覧',
+            'ユーザー管理',
         ];
         $newSizeLimit = $this->newListLimit($request);
-        session()->forget('admin.user.list');
-        session()->push('admin.user.list', url()->full());
         return view('admin.user.index', [
-            'title' => 'ユーザー一覧',
+            'title' => 'ユーザー管理',
             'breadcrumbs' => $breadcrumbs,
-            'users' => $this->userInterface->getUsers($request),
+            'users' => $this->user->getUsers($request),
             'request' => $request,
             'newSizeLimit' => $newSizeLimit
         ]);

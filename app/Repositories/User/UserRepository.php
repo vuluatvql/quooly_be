@@ -24,14 +24,19 @@ class UserRepository extends BaseController implements UserInterface
     public function getUsers($request)
     {
         $newSizeLimit = $this->newListLimit($request);
-        $userBuilder = $this->user;
+        $userBuilder = $this->user->with('userOptional');
         if (isset($request['search_input'])) {
             $userBuilder = $userBuilder->where(function ($q) use ($request) {
-                $q->orWhere($this->escapeLikeSentence('name', $request['search_input']));
+                $q->orWhere($this->escapeLikeSentence(DB::raw('CONCAT(last_name, first_name)'), $request['search_input']));
                 $q->orWhere($this->escapeLikeSentence('email', $request['search_input']));
             });
         }
-        $users = $userBuilder->sortable(['created_at' => 'desc', 'status' => 'desc'])->paginate($newSizeLimit);
+        $users = $userBuilder->sortable(['created_at' => 'desc'])
+            ->select([
+                '*',
+                DB::raw('CONCAT(last_name, first_name) AS name'),
+                DB::raw('CONCAT(last_name_furigana, first_name_furigana) AS furigana_name'),
+            ])->paginate($newSizeLimit);
         if ($this->checkPaginatorList($users)) {
             Paginator::currentPageResolver(function () {
                 return 1;
@@ -87,17 +92,9 @@ class UserRepository extends BaseController implements UserInterface
         $userOptional->property_kodate_chintai = $request->property_kodate_chintai;
         $userOptional->favorite_noti_flag = $request->favorite_noti_flag;
         $userOptional->seminar_noti_flag = $request->seminar_noti_flag;
-        try {
-            if (!$user->save()) {
-                return false;
-            }
-            $userOptional->user_id = $user->id;
-            if (!$userOptional->save()) {
-                return false;
-            }
+        if ($user->save() && $user->userOptional()->save($userOptional)) {
             DB::commit();
             return true;
-        } catch (\Exception $exception) {
         }
         DB::rollBack();
         return false;
