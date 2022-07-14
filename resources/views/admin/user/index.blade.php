@@ -12,6 +12,11 @@ use Carbon\Carbon;
                     <div class="card">
                         <div class="card-header">
                             <label>ユーザー一覧</label>
+                            <div class="box-action">
+                                <a href="{{ route('admin.user.create') }}" class="btn btn-primary btn-action">
+                                    <i class="fa fa-plus"></i>新規登録
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -25,9 +30,6 @@ use Carbon\Carbon;
                                                 <button type="submit" class="btn btn-primary w-100"><i
                                                         class="fa fa-search"></i> &nbsp; 検索</button>
                                             </div>
-                                            <a href="{{ route('admin.user.create') }}" class="btn btn-primary btn-action-create">
-                                                <i class="fa fa-plus"></i>新規登録
-                                            </a>
                                         </form>
                                     </div>
                                 </div>

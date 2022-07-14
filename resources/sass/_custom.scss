@@ -207,3 +207,19 @@ table tbody tr td {
         border-right: 3px red solid;
     }
 }
+.btn-action {
+    height: 56px;
+    min-width: 260px;
+    padding-top: 14px;
+    background: rgb(232,187,43);
+    background: linear-gradient(90deg, rgba(232,187,43,1) 0%, rgba(255,94,0,1) 100%, rgba(255,94,0,1) 100%);
+}
+.card {
+    .card-header {
+        background: white;
+        border-bottom: 0px;
+        label {
+            font-size: 30px;
+        }
+    }
+}
