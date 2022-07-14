@@ -284,7 +284,7 @@ class UserController extends Controller
     }
 
     /**
-     *  @OA\Put(
+     * @OA\Put(
      *      path="/api/v1/profile",
      *      tags={"User"},
      *      summary="Update profile user",
