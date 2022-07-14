@@ -68,28 +68,26 @@ class RequestRepository extends BaseController implements RequestInterface
         DB::beginTransaction();
         try {
             if (!$requestModel->save()) {
-                throw new \Exception("Save request failed!");
+                return false;
             }
             $requestBukkenTypeSave = [];
             foreach ($request->bukken_type as $key => $bukken_type) {
                 $requestBukkenTypeSave[] = [
-                    'request_id' => $requestModel->id,
                     'bukken_type' => $bukken_type
                 ];
             }
             if (!$requestModel->requestBukkenType()->createMany($requestBukkenTypeSave)) {
-                throw new \Exception("Insert request_bukken_type failed!");
+                return false;
             }
 
             $requestBukkenStructureSave = [];
             foreach ($request->bukken_structures as $key => $bukken_structures) {
                 $requestBukkenStructureSave[] = [
-                    'request_id' => $requestModel->id,
                     'building_structure' => $bukken_structures
                 ];
             }
             if (!$requestModel->requestBukkenStructure()->createMany($requestBukkenStructureSave)) {
-                throw new \Exception("Insert request_bukken_structure failed!");
+                return false;
             }
             DB::commit();
             return true;
