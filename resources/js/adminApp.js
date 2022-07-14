@@ -18,6 +18,10 @@ defineRule('password_rule', value => {
     return /^[A-Za-z0-9]*$/i.test(value);
 });
 
+defineRule('is_furigana', value => {
+    return /^[ぁ-ん]+$/i.test(value);
+});
+
 import BtnDeleteConfirm from "./components/common/btnDeleteConfirm.vue";
 import DataEmpty from "./components/common/dataEmpty.vue";
 import PopupAlert from "./components/common/popupAlert.vue";

@@ -16,15 +16,190 @@
                 ref="formData"
               >
                 <Field type="hidden" :value="csrfToken" name="_token" />
-                <CCardHeader>
-                  <CFormLabel>ユーザー作成</CFormLabel>
-                </CCardHeader>
                 <CCardBody>
+                  <CRow class="mb-4">
+                    <h3>ユーザー詳細_編集画面</h3>
+                  </CRow>
+                  <CRow class="mb-4">
+                    <CFormLabel class="col-sm-12" require
+                      >姓名</CFormLabel
+                    >
+                    <div class="col-sm-3">
+                      <Field
+                        name="first_name"
+                        v-model="model.first_name"
+                        rules="required"
+                        class="form-control"
+
+                      />
+                      <ErrorMessage class="error" name="first_name" />
+                    </div>
+                    <div class="col-sm-3">
+                      <Field
+                        name="last_name"
+                        v-model="model.last_name"
+                        rules="required"
+                        class="form-control"
+                        placeholder="例）太郎"
+                      />
+                      <ErrorMessage class="error" name="last_name" />
+                    </div>
+                  </CRow>
+                  <CRow class="mb-4">
+                    <CFormLabel class="col-sm-12" require
+                      >せいめい</CFormLabel
+                    >
+                    <div class="col-sm-3">
+                      <Field
+                        name="first_name_furigana"
+                        v-model="model.first_name_furigana"
+                        rules="required|is_furigana"
+                        class="form-control"
+                        placeholder="例）やまだ"
+
+                      />
+                      <ErrorMessage class="error" name="first_name_furigana" />
+                    </div>
+                    <div class="col-sm-3">
+                      <Field
+                        name="last_name_furigana"
+                        v-model="model.last_name_furigana"
+                        rules="required|is_furigana"
+                        class="form-control"
+                        placeholder="例）太郎"
+                      />
+                      <ErrorMessage class="error" name="last_name_furigana" />
+                    </div>
+                  </CRow>
+                  <CRow class="mb-4">
+                    <CFormLabel class="col-sm-12" require
+                      >郵便番号（ハイフンなし）</CFormLabel
+                    >
+                    <div class="col-sm-3">
+                      <Field
+                        name="postcode"
+                        v-model="model.postcode"
+                        rules="required|max:10"
+                        class="form-control"
+                        placeholder="例）01234567"
+
+                      />
+                      <ErrorMessage class="error" name="postcode" />
+                    </div>
+                    <div class="col-sm-3">
+                      <CButton
+                        class="c-button-orange-outline search-postcode-btn"
+                      >
+                        住所を検索
+                      </CButton>
+                    </div>
+                  </CRow>
+                  <CRow class="mb-4">
+                    <div class="col-sm-3">
+                      <CFormLabel class="col-sm-12" require
+                        >都道府県</CFormLabel
+                      >
+                      <Field
+                        name="prefecture_id"
+                        v-model="model.prefecture_id"
+                        rules="required"
+                        class="form-control"
+                        placeholder="例）東京都"
+
+                      />
+                      <ErrorMessage class="error" name="prefecture_id" />
+                    </div>
+                    <div class="col-sm-3">
+                      <CFormLabel class="col-sm-12" require
+                        >市区郡</CFormLabel
+                      >
+                      <Field
+                        name="city"
+                        v-model="model.city"
+                        rules="required"
+                        class="form-control"
+                        placeholder="例）渋谷区"
+
+                      />
+                      <ErrorMessage class="error" name="city" />
+                    </div>
+                  </CRow>
+                  <CRow class="mb-4">
+                    <div class="col-sm-10">
+                      <CFormLabel class="col-sm-12" require
+                        >番地・建物名・部屋番号まで入力ください</CFormLabel
+                      >
+                      <Field
+                        name="address"
+                        v-model="model.address"
+                        rules="required"
+                        class="form-control"
+                        placeholder="例）渋谷町1丁目2-3 渋谷マンション205号室"
+
+                      />
+                      <ErrorMessage class="error" name="address" />
+                    </div>
+                  </CRow>
+                  <CRow class="mb-4">
+                    <div class="col-sm-3">
+                      <CFormLabel class="col-sm-12" require
+                        >電話番号（ハイフンなし）</CFormLabel
+                      >
+                      <Field
+                        name="phone_number"
+                        v-model="model.phone_number"
+                        rules="required"
+                        class="form-control"
+                        placeholder="例）08012345678"
+
+                      />
+                      <ErrorMessage class="error" name="phone_number" />
+                    </div>
+                  </CRow>
+                  <CRow class="mb-4">
+                    <div class="col-sm-3">
+                      <CFormLabel class="col-sm-12" require
+                        >職業</CFormLabel
+                      >
+                      <CFormSelect
+                        v-model="model.job"
+                        name="job"
+                        :options="[
+                          '例）会社員',
+                          { label: 'One', value: '1' },
+                          { label: 'Two', value: '2' },
+                          { label: 'Three', value: '3'}
+                        ]">
+                      </CFormSelect>
+                      <ErrorMessage class="error" name="job" />
+                    </div>
+                    <div class="col-sm-3">
+                      <CFormLabel class="col-sm-12" require
+                        >市区郡</CFormLabel
+                      >
+                      <Field
+                        name="city"
+                        v-model="model.city"
+                        rules="required"
+                        class="form-control"
+                        placeholder="例）渋谷区"
+
+                      />
+                      <ErrorMessage class="error" name="city" />
+                    </div>
+                  </CRow>
+
+
+
+
+
+
+
                   <CRow class="mb-2">
-                    <CFormLabel class="col-sm-3 lbl-input" require
+                    <CFormLabel class="col-sm-12" require
                       >ユーザー名</CFormLabel
                     >
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                       <Field
                         name="name"
                         v-model="model.name"
@@ -145,9 +320,38 @@ export default {
     let messError = {
       en: {
         fields: {
-          name: {
+          first_name: {
             required: "ユーザー名を入力してください。",
           },
+          last_name: {
+            required: "ユーザー名を入力してください。",
+          },
+          first_name_furigana: {
+            required: "ユーザー名を入力してください。",
+            is_furigana: "フリガナは全角文字で入力してください",
+          },
+          last_name_furigana: {
+            required: "ユーザー名を入力してください。",
+            is_furigana: "フリガナは全角文字で入力してください",
+          },
+          postcode: {
+            required: "ユーザー名を入力してください。",
+            max: "最大10文字",
+          },
+          prefecture_id: {
+            required: "ユーザー名を入力してください。",
+          },
+          city: {
+            required: "ユーザー名を入力してください。",
+          },
+          address: {
+            required: "ユーザー名を入力してください。",
+          },
+          phone_number: {
+            required: "ユーザー名を入力してください。",
+          },
+
+
           email: {
             required: "ユーザーのメールを入力してください。",
             unique_custom: "このメールアドレスは既に登録されています。",
