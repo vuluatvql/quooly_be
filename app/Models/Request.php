@@ -41,4 +41,14 @@ class Request extends Model
      */
     protected $hidden = [
     ];
+
+    public function requestBukkenType()
+    {
+        return $this->hasMany(RequestBukkenType::class);
+    }
+
+    public function requestBukkenStructure()
+    {
+        return $this->hasMany(RequestBukkenStructure::class);
+    }
 }
