@@ -33,6 +33,18 @@ class BaseController extends Controller
         }
         return $newSizeLimit;
     }
+    public static function newListLimitForUser($query)
+    {
+        $newSizeLimit = PAGE_SIZE_DEFAULT;
+        $arrPageSize = PAGE_SIZE_LIMIT;
+        if (isset($query['per_page'])) {
+            $newSizeLimit = (($query['per_page'] === '') || !in_array($query['per_page'], $arrPageSize)) ? $newSizeLimit : $query['per_page'];
+        }
+        if (((isset($query['per_page']))) && (!empty($query->query('per_page')))) {
+            $newSizeLimit = (!in_array($query->query('per_page'), $arrPageSize)) ? $newSizeLimit : $query->query('per_page');
+        }
+        return $newSizeLimit;
+    }
 
     /**
      * [escapeLikeSentence description]

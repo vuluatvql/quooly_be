@@ -24,9 +24,72 @@ class FavoriesController extends Controller
         $this->favories = $favories;
     }
 
+    /**
+     *  @OA\Get(
+     *      path="/api/v1/favorites",
+     *      tags={"Favorites"},
+     *      summary="Favorites list",
+     *      @OA\RequestBody(
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="page",
+     *                  type="integer",
+     *                  example="1"
+     *              ),
+     *              @OA\Property(
+     *                  property="per_page",
+     *                  type="integer",
+     *                  example="20"
+     *              ),
+     *          ),
+     *      ),
+     *  @OA\Response(
+     *      response=200,
+     *      description="Success",
+     *      @OA\MediaType(
+     *          mediaType="application/json",
+     *      )
+     *  ),
+     *  @OA\Response(
+     *      response=400,
+     *      description="Invalid request"
+     *  ),
+     * @OA\Response(
+     *      response=401,
+     *      description="Unauthorized"
+     *  ),
+     *  @OA\Response(
+     *      response=500,
+     *      description="Internal Server Error"
+     *  ),
+     *  )
+     **/
     public function index(Request $request)
     {
-        return $this->favories->get($request);
+        $validator = Validator::make($request->all(), [
+            'page' => 'required|integer|min:1',
+            'per_page' => 'required|integer|min:20|max:100',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'status_code' => StatusCode::BAD_REQUEST
+            ], StatusCode::OK);
+        }
+        $favorites = $this->favories->get($request);
+        return response()->json([
+            'status_code' => StatusCode::OK,
+            'data' => $favorites,
+            'pagination' => [
+                'total' => $favorites->total(),
+                'per_page' => (int) $favorites->perPage(),
+                'current_page' => $favorites->currentPage(),
+                'last_page' => $favorites->lastPage(),
+                'from' => $favorites->firstItem(),
+                'to' => $favorites->lastItem(),
+            ],
+        ], StatusCode::OK);
     }
 
     /**
@@ -38,13 +101,6 @@ class FavoriesController extends Controller
     {
         //
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
 
     /**
      * @OA\Post(
@@ -87,9 +143,7 @@ class FavoriesController extends Controller
         $validator = Validator::make($request->all(), [
             'bukken_id' => [
                 'required',
-                Rule::in(array_map(function ($e) {
-                    return (string)$e;
-                }, bukkenType::geBValues()))
+                Rule::in(BukkenType::getValues())
             ]
         ]);
         if ($validator->fails()) {

@@ -1,5 +1,13 @@
 @php
 $routeName = \Route::currentRouteName();
+$routeUser = [
+    'admin.user.index',
+    'admin.user.create',
+    'admin.user.store',
+    'admin.user.show',
+    'admin.user.edit',
+    'admin.user.update'
+];
 $routeContact = [
     'admin.contact.index',
     'admin.contact.create',
@@ -32,9 +40,9 @@ $routeContact = [
                         </div>
                         <div class="simplebar-content">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.user.index') }}">
+                                <a class="nav-link {{ in_array($routeName, $routeUser) ? 'active' : '' }}" href="{{ route('admin.user.index') }}">
                                     <i class="nav-icon fa fa-user" aria-hidden="true"></i>
-                                    ユーザー一覧
+                                    ユーザー管理
                                 </a>
                             </li>
                         </div>

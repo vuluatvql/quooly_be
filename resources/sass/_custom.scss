@@ -213,9 +213,13 @@ table tbody tr td {
 .btn-action {
     height: 56px;
     min-width: 260px;
-    padding-top: 14px;
+    padding-top: 16px;
+    border: 0px;
     background: rgb(232,187,43);
     background: linear-gradient(90deg, rgba(232,187,43,1) 0%, rgba(255,94,0,1) 100%, rgba(255,94,0,1) 100%);
+}
+#search_input {
+    min-width: 300px;
 }
 .card {
     .card-header {

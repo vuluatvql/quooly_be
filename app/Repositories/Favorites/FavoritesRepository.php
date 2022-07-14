@@ -5,8 +5,8 @@ namespace App\Repositories\Favorites;
 use App\Models\Favorites;
 use App\Http\Controllers\BaseController;
 use App\Repositories\Favorites\FavoritesInterface;
-use Illuminate\Support\Facades\Auth;
 use JWTAuth;
+use Illuminate\Pagination\Paginator;
 
 class FavoritesRepository extends BaseController implements FavoritesInterface
 {
@@ -19,7 +19,16 @@ class FavoritesRepository extends BaseController implements FavoritesInterface
 
     public function get($request)
     {
-        return Favorites::all();
+        $newSizeLimit = $this->newListLimitForUser($request);
+        $favoritesBuilder = $this->favorites->where('user_id', JWTAuth::user()->id);
+        $favorites = $favoritesBuilder->sortable(['created_at' => 'desc'])->paginate($newSizeLimit);
+        if ($this->checkPaginatorList($favorites)) {
+            Paginator::currentPageResolver(function () {
+                return 1;
+            });
+            $favorites = $favoritesBuilder->paginate($newSizeLimit);
+        }
+        return $favorites;
     }
 
     public function getById($id)
