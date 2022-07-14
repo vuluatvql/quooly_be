@@ -36,5 +36,6 @@ Route::group([
         Route::resource('favorites', FavoriesController::class);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::resource('view-history', ViewHistoryController::class);
+        Route::put('profile', [UserController::class, 'update']);
     });
 });

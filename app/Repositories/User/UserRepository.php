@@ -106,16 +106,39 @@ class UserRepository extends BaseController implements UserInterface
     }
     public function update($request, $id)
     {
-        $userInfo = $this->user->where('id', $id)->first();
+        $userInfo = $this->user->with('userOptional')->where('id', $id)->first();
         if (!$userInfo) {
             return false;
         }
-        $userInfo->name = $request->name;
+        DB::beginTransaction();
+        $userInfo->first_name = $request->first_name;
+        $userInfo->last_name = $request->last_name;
+        $userInfo->first_name_furigana = $request->first_name_furigana;
+        $userInfo->last_name_furigana = $request->last_name_furigana;
         $userInfo->email = $request->email;
-        if ($request->password) {
+        $userInfo->birthday = $request->birthday;
+        if (isset($request->password))
             $userInfo->password = Hash::make($request->password);
+        $userInfo->phone_number = $request->phone_number;
+        $userInfo->postcode = $request->postcode;
+        $userInfo->prefecture_id = $request->prefecture_id;
+        $userInfo->city = $request->city;
+        $userInfo->address = $request->address;
+        $userInfo->userOptional->jobs_type = $request->jobs_type;
+        $userInfo->userOptional->company_industry_type = $request->company_industry_type;
+        $userInfo->userOptional->rent_income = $request->rent_income;
+        $userInfo->userOptional->annual_income = $request->annual_income;
+        $userInfo->userOptional->user_income = $request->user_income;
+        $userInfo->userOptional->property_building = $request->property_building;
+        $userInfo->userOptional->property_kodate_chintai = $request->property_kodate_chintai;
+        $userInfo->userOptional->favorite_noti_flag = $request->favorite_noti_flag;
+        $userInfo->userOptional->seminar_noti_flag = $request->seminar_noti_flag;
+        if ($userInfo->save() && $userInfo->userOptional->save()) {
+            DB::commit();
+            return true;
         }
-        return $userInfo->save();
+        DB::rollBack();
+        return false;
     }
 
     public function updateLastLogin($id)
