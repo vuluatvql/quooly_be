@@ -158,26 +158,20 @@ class RequestController extends Controller
             'construction_year' => 'required|integer',
             'walkrange' => 'required|integer',
             'comment' => 'required|string|max:5000',
-            'bukken_type' => 'array',
-            'bukken_type.*' => [
-                'required',
-                'integer',
+            'bukken_type' => [
+                'array',
                 Rule::in(BukkenType::getValues())
             ],
             'bukken_structures' => [
                 'present',
                 'array',
-                'min:1'
-            ],
-            'bukken_structures.*' => [
-                'required',
-                'integer',
+                'min:1',
                 Rule::in(BukkenStructure::getValues())
             ],
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'message' => $validator->errors(),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }

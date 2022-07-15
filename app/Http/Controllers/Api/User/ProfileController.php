@@ -227,7 +227,7 @@ class ProfileController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'message' => $validator->errors(),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }
