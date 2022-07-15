@@ -32,7 +32,7 @@ Route::group([
     Route::resource('reset-password', ResetPasswordController::class);
 
     Route::group([
-        'middleware' => ['jwt.verify','auth.jwt'],
+        'middleware' => ['jwt.verify', 'auth.jwt'],
     ], function () {
         Route::resource('favorites', FavoriesController::class);
         Route::post('logout', [AuthController::class, 'logout']);
