@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
+use JWTAuth;
 
 class UserRepository extends BaseController implements UserInterface
 {
     private $user;
+
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -60,6 +62,7 @@ class UserRepository extends BaseController implements UserInterface
         }
         return false;
     }
+
     public function checkEmail($request)
     {
         return !$this->user->where(function ($query) use ($request) {
@@ -69,6 +72,7 @@ class UserRepository extends BaseController implements UserInterface
             $query->where(['email' => $request["value"]]);
         })->exists();
     }
+
     public function store($request)
     {
         $user = new $this->user();
@@ -103,6 +107,7 @@ class UserRepository extends BaseController implements UserInterface
         DB::rollBack();
         return false;
     }
+
     public function getById($id)
     {
         return $this->user->where('id', $id)->first();
@@ -156,10 +161,12 @@ class UserRepository extends BaseController implements UserInterface
         $currentUser->last_login_at = Carbon::now();
         return $currentUser->save();
     }
+
     public function getByEmail($request)
     {
         return $this->user->where('email', $request->email)->first();
     }
+
     public function generalResetPass($request)
     {
         $account = $this->user->where('email', $request->email)->first();
@@ -193,6 +200,7 @@ class UserRepository extends BaseController implements UserInterface
         Mail::to($account->email)->send(new ForgotPassword($mailContents));
         return true;
     }
+
     public function getUserByEmail($email)
     {
         return $this->user->where('email', $email)->first();
@@ -205,6 +213,7 @@ class UserRepository extends BaseController implements UserInterface
             ['reset_password_token_expire', '>=', Carbon::now()]
         ])->first();
     }
+
     public function updatePasswordByToken($request, $token)
     {
         $account = $this->getUserByToken($token);
@@ -248,5 +257,14 @@ class UserRepository extends BaseController implements UserInterface
         }
         DB::rollBack();
         return false;
+    }
+    public function changePassword($request)
+    {
+        $userInfo = $this->user->where('id', JWTAuth::user()->id)->first();
+        if (!$userInfo) {
+            return false;
+        }
+        $userInfo->password = Hash::make($request->password);
+        return $userInfo->save();
     }
 }
