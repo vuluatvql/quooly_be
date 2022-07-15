@@ -23,6 +23,12 @@ defineRule('password_rule', value => {
 defineRule('is_furigana', value => {
     return /^[ぁ-ん]+$/i.test(value);
 });
+defineRule('telephone', value => {
+    return /^0(\d-\d{4}-\d{4})+$/i.test(value.trim()) ||
+      /^0(\d{3}-\d{2}-\d{4})+$/i.test(value.trim()) ||
+      /^(070|080|090|050)(-\d{4}-\d{4})+$/i.test(value.trim()) ||
+      /^0(\d{2}-\d{3}-\d{4})+$/i.test(value.trim())
+});
 
 import BtnDeleteConfirm from "./components/common/btnDeleteConfirm.vue";
 import DataEmpty from "./components/common/dataEmpty.vue";
