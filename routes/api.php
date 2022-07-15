@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\User\RegisterController;
 use App\Http\Controllers\Api\User\ForgotPasswordController;
 use App\Http\Controllers\Api\User\ResetPasswordController;
 use App\Http\Controllers\Api\User\FavoriesController;
+use App\Http\Controllers\Api\User\MailSettingController;
 use App\Http\Controllers\Api\User\ViewHistoryController;
 use App\Http\Controllers\Api\User\ProfileController;
 use App\Http\Controllers\Api\User\RequestController;
@@ -44,5 +45,6 @@ Route::group([
         Route::resource('profile', ProfileController::class);
         Route::resource('request', RequestController::class);
         Route::resource('change-password', ChangePasswordController::class);
+        Route::resource('mail-setting', MailSettingController::class);
     });
 });
