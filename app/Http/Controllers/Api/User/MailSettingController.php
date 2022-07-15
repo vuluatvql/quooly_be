@@ -160,13 +160,6 @@ class MailSettingController extends Controller
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }
-        $userOption = $this->userOptional->getById($id);
-        if(empty($userOption)){
-            return response()->json([
-                'message' => "This user_option not exist!",
-                'status_code' => StatusCode::BAD_REQUEST
-            ], StatusCode::OK);
-        }
         if($this->userOptional->update($request, $id)){
             return response()->json([
                 'message' => "Success",

@@ -43,7 +43,7 @@ class UserOptionalRepository extends BaseController implements UserOptionalInter
 
     public function update($request, $id)
     {
-        $userOptionInfo = $this->userOptional->where('id', $id)->where('user_id', JWTAuth::user()->id)->first();
+        $userOptionInfo = $this->userOptional->where('user_id', JWTAuth::user()->id)->first();
         if (!$userOptionInfo) {
             return false;
         }
@@ -52,9 +52,6 @@ class UserOptionalRepository extends BaseController implements UserOptionalInter
         $userOptionInfo->favorite_noti_flag = $request->favorite_noti_flag;
         $userOptionInfo->seminar_noti_flag = $request->seminar_noti_flag;
        
-        if ($userOptionInfo->save()) {
-            return true;
-        }
-        return false;
+        return $userOptionInfo->save();
     }
 }
