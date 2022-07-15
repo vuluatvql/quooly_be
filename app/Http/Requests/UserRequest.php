@@ -26,7 +26,27 @@ class UserRequest extends FormRequest
     {
         $id = $this->user;
         return [
-            'name' => 'required|max:255',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'first_name_furigana' => [
+                'required',
+                'regex:/^[ぁ-ん]+$/'
+            ],
+            'last_name_furigana' => [
+                'required',
+                'regex:/^[ぁ-ん]+$/'
+            ],
+            'postcode' => 'required|max:10',
+            'prefecture_id' => 'required',
+            'city' => 'required',
+            'company_industry_type' => 'required',
+            'jobs_type' => 'required',
+            'address' => 'required',
+            'phone_number' => 'required',
+            'birthday' => 'required',
+            'rent_income' => 'required',
+            'annual_income' => 'required',
+            'user_income' => 'required',
             'email' => [
                 'required',
                 'max:255',

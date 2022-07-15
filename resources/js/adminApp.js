@@ -2,6 +2,8 @@
 import { createApp } from "vue";
 import CoreuiVue from "@coreui/vue";
 import { configure, defineRule } from "vee-validate";
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 configure({
     validateOnBlur: false,
     validateOnChange: false,
@@ -37,5 +39,6 @@ app.component("limit-page-option", LimitPageOption);
 app.component("user-create", UserCreate);
 app.component("user-edit", UserEdit);
 app.component("contact-edit", ContactEdit);
+app.component('Datepicker', Datepicker);
 
 app.mount("#app");
