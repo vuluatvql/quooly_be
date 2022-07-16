@@ -75,9 +75,9 @@ class MailSettingController extends Controller
     /**
      *  @OA\Put(
      *      path="/api/v1/user/mail-setting/id",
-     *      tags={"Mail-Setting"},
+     *      tags={"User Profile"},
      *      summary="Setting email notifications",
-     *      
+     *
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
@@ -123,7 +123,7 @@ class MailSettingController extends Controller
      *          description="Internal Server Error"
      *      ),
      *  )
-     * 
+     *
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
