@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
+
 
 use App\Enums\MailNoti;
 use App\Enums\IndustryType;
@@ -13,39 +14,32 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use JWTAuth;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
     private $user;
+
     public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     *  @OA\Post(
-     *      path="/api/v1/user",
-     *      tags={"User"},
-     *      summary="Register User",
+     * @OA\Put(
+     *      path="/api/v1/user/profile/{id}",
+     *      tags={"User Profile"},
+     *      summary="Update profile user",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1"
+     *          )
+     *      ),
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
@@ -182,8 +176,9 @@ class UserController extends Controller
      *      ),
      *  )
      **/
-    public function store(Request $request)
+    public function update(Request $request, $id)
     {
+        $currentUser = JWTAuth::user();
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
@@ -193,34 +188,34 @@ class UserController extends Controller
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('users')->whereNull('deleted_at')
+                Rule::unique('users')->whereNull('deleted_at')->ignore($currentUser->id)
             ],
             'birthday' => 'required|date_format:Y/m/d|before_or_equal:' . Carbon::now()->format('Y/m/d'),
-            'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
-            'phone_number' => 'nullable',
-            'postcode' => 'nullable|max:10',
+            'password' => 'nullable|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
+            'phone_number' => 'required',
+            'postcode' => 'required|max:10',
             'prefecture_id' => [
-                'nullable',
+                'required',
                 Rule::in(Prefecture::pluck('id'))
             ],
-            'city' => 'nullable|max:255',
-            'address' => 'nullable|max:255',
+            'city' => 'required|max:255',
+            'address' => 'required|max:255',
             'jobs_type' => [
-                'nullable',
+                'required',
                 'integer',
                 Rule::in(JobType::getValues())
             ],
             'company_industry_type' => [
-                'nullable',
+                'required',
                 'integer',
                 Rule::in(IndustryType::getValues())
             ],
-            'rent_income' => 'nullable|integer',
-            'annual_income' => 'nullable|integer',
-            'user_income' => 'nullable|integer',
-            'property_building' => 'nullable|integer',
-            'property_division' => 'nullable|integer',
-            'property_kodate_chintai' => 'nullable|integer',
+            'rent_income' => 'required|integer',
+            'annual_income' => 'required|integer',
+            'user_income' => 'required|integer',
+            'property_building' => 'required|integer',
+            'property_division' => 'required|integer',
+            'property_kodate_chintai' => 'required|integer',
             'favorite_noti_flag' => [
                 'required',
                 Rule::in(MailNoti::getValues())
@@ -248,60 +243,61 @@ class UserController extends Controller
                 ], StatusCode::OK);
             }
         }
-        if (!$this->user->store($request)) {
+
+        if (!$this->user->update($request, $currentUser->id)) {
             return response()->json([
                 'message' => 'エラーが発生しました。',
                 'status_code' => StatusCode::INTERNAL_ERR
             ], StatusCode::OK);
         }
         return response()->json([
-            'message' => 'ユーザーの新規作成が完了しました。',
+            'message' => 'ユーザーの変更が完了しました。',
             'status_code' => StatusCode::OK
         ], StatusCode::OK);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+     * @OA\Get(
+     *      path="/api/v1/user/profile/{id}",
+     *      tags={"User Profile"},
+     *      summary="get user profile",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Invalid request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error"
+     *      ),
+     *  )
+     **/
     public function show($id)
     {
-        //
+        return response()->json([
+            'status_code' => StatusCode::OK,
+            'data' => $this->user->getById(JWTAuth::user()->id)
+        ], StatusCode::OK);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

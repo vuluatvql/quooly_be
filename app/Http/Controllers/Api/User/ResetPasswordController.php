@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\UserRole;
 use App\Enums\StatusCode;
@@ -67,9 +67,9 @@ class ResetPasswordController extends Controller
     }
 
     /**
-     *  @OA\PUT(
-     *      path="/api/v1/reset-password/{token}",
-     *      tags={"Login"},
+     *  @OA\Put(
+     *      path="/api/v1/user/reset-password/{token}",
+     *      tags={"User Login"},
      *      summary="reset password",
      *      @OA\Parameter(
      *          name="token",
