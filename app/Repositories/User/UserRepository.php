@@ -110,7 +110,7 @@ class UserRepository extends BaseController implements UserInterface
 
     public function getById($id)
     {
-        return $this->user->where('id', $id)->first();
+        return $this->user->with('userOptional')->where('id', $id)->first();
     }
 
     public function update($request, $id)
@@ -267,15 +267,4 @@ class UserRepository extends BaseController implements UserInterface
         $userInfo->password = Hash::make($request->password);
         return $userInfo->save();
     }
-
-    public function profile()
-    {
-        $userBuilder = $this->user->with('userOptional');
-        $userProfile = $userBuilder->where('id', JWTAuth::user()->id)->first();
-        if (empty($userProfile)) {
-            return null;
-        }
-        return $userProfile;
-    }
-
 }

@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\User\MailSettingController;
 use App\Http\Controllers\Api\User\ViewHistoryController;
 use App\Http\Controllers\Api\User\ProfileController;
 use App\Http\Controllers\Api\User\RequestController;
-use App\Http\Controllers\Api\ChangePasswordController;
+use App\Http\Controllers\Api\User\ChangePasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

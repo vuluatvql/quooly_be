@@ -256,18 +256,47 @@ class ProfileController extends Controller
         ], StatusCode::OK);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/v1/user/profile/{id}",
+     *      tags={"User Profile"},
+     *      summary="get user profile",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Invalid request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error"
+     *      ),
+     *  )
+     **/
     public function show($id)
     {
-        $userProfile = $this->user->profile();
-        if (!$userProfile) {
-            return response()->json([
-                'message' => 'エラーが発生しました。',
-                'status_code' => StatusCode::INTERNAL_ERR,
-            ], StatusCode::OK);
-        }
         return response()->json([
             'status_code' => StatusCode::OK,
-            'data' => $userProfile
+            'data' => $this->user->getById(JWTAuth::user()->id)
         ], StatusCode::OK);
     }
 
