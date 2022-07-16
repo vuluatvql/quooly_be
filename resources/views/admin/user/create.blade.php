@@ -10,5 +10,6 @@
     'propertyBuilding' => $propertyBuilding ?? [],
     'propertyDivision' => $propertyDivision ?? [],
     'propertyKodateChintai' => $propertyKodateChintai ?? [],
+    'prefectures' => $prefectures ?? [],
 ]) }}"></user-create>
 @endsection

@@ -12,6 +12,7 @@ use App\Enums\JobType;
 use App\Enums\PropertyBuilding;
 use App\Enums\PropertyDivision;
 use App\Enums\PropertyKodateChintai;
+use App\Models\Prefecture;
 
 class UserController extends BaseController
 {
@@ -60,6 +61,9 @@ class UserController extends BaseController
         $propertyBuilding = PropertyBuilding::parseArray();
         $propertyDivision = PropertyDivision::parseArray();
         $propertyKodateChintai = PropertyKodateChintai::parseArray();
+        $prefectures = Prefecture::select('id as value', 'name as label')
+            ->orderBy('order_num')
+            ->get();
         
         return view('admin.user.create', [
             'title' => 'ユーザー作成',
@@ -69,6 +73,7 @@ class UserController extends BaseController
             'propertyBuilding' => $propertyBuilding,
             'propertyDivision' => $propertyDivision,
             'propertyKodateChintai' => $propertyKodateChintai,
+            'prefectures' => $prefectures,
         ]);
     }
 

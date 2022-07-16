@@ -16,10 +16,10 @@
                 ref="formData"
               >
                 <Field type="hidden" :value="csrfToken" name="_token" />
+                <CCardHeader>
+                  <CFormLabel>ユーザー詳細_編集画面</CFormLabel>
+                </CCardHeader>
                 <CCardBody>
-                  <CRow class="mb-4">
-                    <h3>ユーザー詳細_編集画面</h3>
-                  </CRow>
                   <CRow class="mb-4">
                     <CFormLabel class="col-sm-12" require
                       >姓名</CFormLabel
@@ -79,7 +79,7 @@
                       <Field
                         name="email"
                         v-model="model.email"
-                        rules="required|unique_custom"
+                        rules="required|unique_custom|email"
                         class="form-control"
                       />
                       <ErrorMessage class="error" name="email" />
@@ -93,7 +93,7 @@
                       <Field
                         name="password"
                         type="password"
-                        autocomplete="off"
+                        autocomplete="new-password"
                         v-model="model.password"
                         rules="required|max:15|min:8|password_rule"
                         class="form-control"
@@ -110,7 +110,7 @@
                       <Field
                         name="password_confirmation"
                         type="password"
-                        autocomplete="off"
+                        autocomplete="new-password"
                         v-model="model.password_confirmation"
                         rules="required|confirmed:@password"
                         class="form-control"
@@ -149,14 +149,12 @@
                       <CFormLabel class="col-sm-12" require
                         >都道府県</CFormLabel
                       >
-                      <Field
+                      <CFormSelect
                         name="prefecture_id"
                         v-model="model.prefecture_id"
                         rules="required"
-                        class="form-control"
-                        placeholder="例）東京都"
-
-                      />
+                        :options="data.prefectures">
+                      </CFormSelect>
                       <ErrorMessage class="error" name="prefecture_id" />
                     </div>
                     <div class="col-sm-3">
@@ -198,7 +196,7 @@
                       <Field
                         name="phone_number"
                         v-model="model.phone_number"
-                        rules="required"
+                        rules="required|telephone"
                         class="form-control"
                         placeholder="例）08012345678"
 
@@ -253,10 +251,11 @@
                         >家賃収入*1</CFormLabel
                       >
                       <div class="d-flex">
-                        <Field
+                        <CFormInput 
+                          type="number"
                           name="rent_income"
                           v-model="model.rent_income"
-                          rules="required"
+                          rules="required|number"
                           class="form-control w-75 mr-2"
                           placeholder=""
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;万円</span>
@@ -268,10 +267,11 @@
                         >世帯年収（家賃収入込み）*2</CFormLabel
                       >
                       <div class="d-flex">
-                        <Field
+                        <CFormInput 
+                          type="number"
                           name="annual_income"
                           v-model="model.annual_income"
-                          rules="required"
+                          rules="required|number"
                           class="form-control w-75 mr-2"
                           placeholder=""
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;万円</span>
@@ -285,10 +285,11 @@
                         >不動産購入のための自己資金</CFormLabel
                       >
                       <div class="d-flex">
-                        <Field
+                        <CFormInput 
+                          type="number"
                           name="user_income"
                           v-model="model.user_income"
-                          rules="required"
+                          rules="required|number"
                           class="form-control w-75 mr-2"
                           placeholder=""
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;万円</span>
@@ -343,11 +344,12 @@
                         <CFormCheck 
                           type="radio"
                           name="mail_magazine_flag"
+                          id="mail_magazine_flag_on"
                           v-model="model.mail_magazine_flag"
                           class="form-control w-75 mr-2 mt-3"
                           value="1"
                           checked
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;受け取る</span>
+                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="mail_magazine_flag_on">受け取る</label></span>
                       </div>
                     </div>
                     <div class="col-sm-3">
@@ -355,10 +357,11 @@
                         <CFormCheck 
                           type="radio"
                           name="mail_magazine_flag"
+                          id="mail_magazine_flag_off"
                           v-model="model.mail_magazine_flag"
                           class="form-control w-75 mr-2 mt-3"
                           value="0"
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;受け取らない</span>
+                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="mail_magazine_flag_off">受け取らない</label></span>
                       </div>
                     </div>
                     <ErrorMessage class="error" name="mail_magazine_flag" />
@@ -372,11 +375,12 @@
                         <CFormCheck 
                           type="radio"
                           name="request_noti_flag"
+                          id="request_noti_flag_on"
                           v-model="model.request_noti_flag"
                           class="form-control w-75 mr-2 mt-3"
                           value="1"
                           checked
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;受け取る</span>
+                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="request_noti_flag_on">受け取る</label></span>
                       </div>
                     </div>
                     <div class="col-sm-3">
@@ -384,10 +388,11 @@
                         <CFormCheck 
                           type="radio"
                           name="request_noti_flag"
+                          id="request_noti_flag_off"
                           v-model="model.request_noti_flag"
                           class="form-control w-75 mr-2 mt-3"
                           value="0"
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;受け取らない</span>
+                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="request_noti_flag_off">受け取らない</label></span>
                       </div>
                     </div>
                     <ErrorMessage class="error" name="request_noti_flag" />
@@ -404,7 +409,7 @@
                   </CRow>
                   <CRow>
                     <div class="col-md-12 btn-box">
-                      <CButton type="submit" class="btn-primary btn-action btn-w-100">
+                      <CButton type="submit" class="btn-primary btn-action btn-w-100 pt-1">
                         保存する
                       </CButton>
                       <a :href="data.urlBack" class="btn btn-secondary size-btn-cancel text-white btn-w-100">
@@ -505,22 +510,27 @@ export default {
           },
           phone_number: {
             required: "ユーザー名を入力してください。",
+            telephone: "ユーザー名を入力してください。",
           },
           birthday: {
             required: "ユーザー名を入力してください。",
           },
           rent_income: {
             required: "ユーザー名を入力してください。",
+            number: "ユーザー名を入力してください。",
           },
           annual_income: {
             required: "ユーザー名を入力してください。",
+            number: "ユーザー名を入力してください。",
           },
           user_income: {
             required: "ユーザー名を入力してください。",
+            number: "ユーザー名を入力してください。",
           },
           email: {
             required: "ユーザーのメールを入力してください。",
             unique_custom: "このメールアドレスは既に登録されています。",
+            email: 'メールが無効になります。'
           },
           password: {
             password_rule:

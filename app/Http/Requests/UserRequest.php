@@ -4,6 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Enums\MailNoti;
+use App\Enums\IndustryType;
+use App\Enums\JobType;
+use Carbon\Carbon;
+use App\Models\Prefecture;
 
 class UserRequest extends FormRequest
 {
@@ -25,45 +30,48 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $id = $this->user;
+        
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'first_name_furigana' => [
-                'required',
-                'regex:/^[ぁ-ん]+$/'
-            ],
-            'last_name_furigana' => [
-                'required',
-                'regex:/^[ぁ-ん]+$/'
-            ],
-            'postcode' => 'required|max:10',
-            'prefecture_id' => 'required',
-            'city' => 'required',
-            'company_industry_type' => 'required',
-            'jobs_type' => 'required',
-            'address' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'first_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
+            'last_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
+            'birthday' => 'required|date_format:Y/m/d|before_or_equal:' . Carbon::now()->format('Y/m/d'),
+            'password' => 'nullable|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
             'phone_number' => 'required',
-            'birthday' => 'required',
-            'rent_income' => 'required',
-            'annual_income' => 'required',
-            'user_income' => 'required',
+            'postcode' => 'required|max:10',
+            'prefecture_id' => [
+                'required',
+                Rule::in(Prefecture::pluck('id'))
+            ],
+            'city' => 'required|max:255',
+            'address' => 'required|max:255',
+            'jobs_type' => [
+                'required',
+                'integer',
+                Rule::in(JobType::getValues())
+            ],
+            'company_industry_type' => [
+                'required',
+                'integer',
+                Rule::in(IndustryType::getValues())
+            ],
+            'rent_income' => 'required|integer',
+            'annual_income' => 'required|integer',
+            'user_income' => 'required|integer',
+            'property_building' => 'required|integer',
+            'property_division' => 'required|integer',
+            'property_kodate_chintai' => 'required|integer',
             'email' => [
                 'required',
                 'max:255',
-                Rule::unique('user')->whereNull('deleted_at')->where(function($q) use ($id) {
+                Rule::unique('users')->whereNull('deleted_at')->where(function($q) use ($id) {
                     if ($id) {
                         $q->where('id', '<>', $id);
                     }
-                })
+                }),
+                'email'
             ],
-            'password' => [
-                'nullable',
-                'max:15',
-                'min:8',
-                'regex:/^[A-Za-z0-9]*$/',
-                'same:password_confirmation'
-            ],
-            'password_confirmation' => 'nullable'
         ];
     }
 }
