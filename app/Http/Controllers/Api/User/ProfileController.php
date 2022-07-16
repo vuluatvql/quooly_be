@@ -254,7 +254,21 @@ class ProfileController extends Controller
             'message' => 'ユーザーの変更が完了しました。',
             'status_code' => StatusCode::OK
         ], StatusCode::OK);
+    }
 
+    public function show($id)
+    {
+        $userProfile = $this->user->profile();
+        if (!$userProfile) {
+            return response()->json([
+                'message' => 'エラーが発生しました。',
+                'status_code' => StatusCode::INTERNAL_ERR,
+            ], StatusCode::OK);
+        }
+        return response()->json([
+            'status_code' => StatusCode::OK,
+            'data' => $userProfile
+        ], StatusCode::OK);
     }
 
 }

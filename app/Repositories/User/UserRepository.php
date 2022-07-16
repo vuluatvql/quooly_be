@@ -267,4 +267,15 @@ class UserRepository extends BaseController implements UserInterface
         $userInfo->password = Hash::make($request->password);
         return $userInfo->save();
     }
+
+    public function profile()
+    {
+        $userBuilder = $this->user->with('userOptional');
+        $userProfile = $userBuilder->where('id', JWTAuth::user()->id)->first();
+        if (empty($userProfile)) {
+            return null;
+        }
+        return $userProfile;
+    }
+
 }
