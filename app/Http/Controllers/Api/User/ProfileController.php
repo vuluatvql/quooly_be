@@ -178,7 +178,7 @@ class ProfileController extends Controller
      **/
     public function update(Request $request, $id)
     {
-        $currentUser = JWTAuth::toUser();
+        $currentUser = JWTAuth::user();
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
