@@ -8,15 +8,19 @@ use App\Models\User;
 use App\Models\UserOptional;
 use App\Http\Controllers\BaseController;
 use App\Mail\ForgotPassword;
+use App\Mail\RegisterUser;
 use App\Mail\ForgotPassComplete;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Str;
+use JWTAuth;
 
 class UserRepository extends BaseController implements UserInterface
 {
     private $user;
+
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -58,6 +62,7 @@ class UserRepository extends BaseController implements UserInterface
         }
         return false;
     }
+
     public function checkEmail($request)
     {
         return !$this->user->where(function ($query) use ($request) {
@@ -67,6 +72,7 @@ class UserRepository extends BaseController implements UserInterface
             $query->where(['email' => $request["value"]]);
         })->exists();
     }
+
     public function store($request)
     {
         $user = new $this->user();
@@ -90,6 +96,7 @@ class UserRepository extends BaseController implements UserInterface
         $userOptional->annual_income = $request->annual_income;
         $userOptional->user_income = $request->user_income;
         $userOptional->property_building = $request->property_building;
+        $userOptional->property_division = $request->property_division;
         $userOptional->property_kodate_chintai = $request->property_kodate_chintai;
         $userOptional->favorite_noti_flag = $request->favorite_noti_flag;
         $userOptional->seminar_noti_flag = $request->seminar_noti_flag;
@@ -100,22 +107,49 @@ class UserRepository extends BaseController implements UserInterface
         DB::rollBack();
         return false;
     }
+
     public function getById($id)
     {
-        return $this->user->where('id', $id)->first();
+        return $this->user->with('userOptional')->where('id', $id)->first();
     }
+
     public function update($request, $id)
     {
-        $userInfo = $this->user->where('id', $id)->first();
+        $userInfo = $this->user->with('userOptional')->where('id', $id)->first();
         if (!$userInfo) {
             return false;
         }
-        $userInfo->name = $request->name;
+        DB::beginTransaction();
+        $userInfo->first_name = $request->first_name;
+        $userInfo->last_name = $request->last_name;
+        $userInfo->first_name_furigana = $request->first_name_furigana;
+        $userInfo->last_name_furigana = $request->last_name_furigana;
         $userInfo->email = $request->email;
+        $userInfo->birthday = $request->birthday;
         if ($request->password) {
             $userInfo->password = Hash::make($request->password);
         }
-        return $userInfo->save();
+        $userInfo->phone_number = $request->phone_number;
+        $userInfo->postcode = $request->postcode;
+        $userInfo->prefecture_id = $request->prefecture_id;
+        $userInfo->city = $request->city;
+        $userInfo->address = $request->address;
+        $userInfo->userOptional->jobs_type = $request->jobs_type;
+        $userInfo->userOptional->company_industry_type = $request->company_industry_type;
+        $userInfo->userOptional->rent_income = $request->rent_income;
+        $userInfo->userOptional->annual_income = $request->annual_income;
+        $userInfo->userOptional->user_income = $request->user_income;
+        $userInfo->userOptional->property_building = $request->property_building;
+        $userInfo->userOptional->property_division = $request->property_division;
+        $userInfo->userOptional->property_kodate_chintai = $request->property_kodate_chintai;
+        $userInfo->userOptional->favorite_noti_flag = $request->favorite_noti_flag;
+        $userInfo->userOptional->seminar_noti_flag = $request->seminar_noti_flag;
+        if ($userInfo->save() && $userInfo->userOptional->save()) {
+            DB::commit();
+            return true;
+        }
+        DB::rollBack();
+        return false;
     }
 
     public function updateLastLogin($id)
@@ -127,10 +161,12 @@ class UserRepository extends BaseController implements UserInterface
         $currentUser->last_login_at = Carbon::now();
         return $currentUser->save();
     }
+
     public function getByEmail($request)
     {
         return $this->user->where('email', $request->email)->first();
     }
+
     public function generalResetPass($request)
     {
         $account = $this->user->where('email', $request->email)->first();
@@ -164,6 +200,7 @@ class UserRepository extends BaseController implements UserInterface
         Mail::to($account->email)->send(new ForgotPassword($mailContents));
         return true;
     }
+
     public function getUserByEmail($email)
     {
         return $this->user->where('email', $email)->first();
@@ -176,6 +213,7 @@ class UserRepository extends BaseController implements UserInterface
             ['reset_password_token_expire', '>=', Carbon::now()]
         ])->first();
     }
+
     public function updatePasswordByToken($request, $token)
     {
         $account = $this->getUserByToken($token);
@@ -194,5 +232,39 @@ class UserRepository extends BaseController implements UserInterface
         ];
         Mail::to($account->email)->send(new ForgotPassComplete($mailContents));
         return true;
+    }
+
+    public function register($request)
+    {
+        $user = new $this->user();
+        $user->role_id = $request->role_id;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->first_name_furigana = $request->first_name_furigana;
+        $user->last_name_furigana = $request->last_name_furigana;
+        $user->email = $request->email;
+        $password = Str::random(10);
+        $user->password = $password;
+        $user->phone_number = $request->phone_number;
+        $userOptional = new UserOptional();
+        if ($user->save() && $user->userOptional()->save($userOptional)) {
+            DB::commit();
+            Mail::to($user->email)->send(new RegisterUser([
+                'email' => $user->email,
+                'password' => $password
+            ]));
+            return true;
+        }
+        DB::rollBack();
+        return false;
+    }
+    public function changePassword($request)
+    {
+        $userInfo = $this->user->where('id', JWTAuth::user()->id)->first();
+        if (!$userInfo) {
+            return false;
+        }
+        $userInfo->password = Hash::make($request->password);
+        return $userInfo->save();
     }
 }

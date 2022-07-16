@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\BukkenType;
 use App\Enums\StatusCode;
@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use JWTAuth;
 
 class FavoriesController extends Controller
 {
@@ -26,23 +27,27 @@ class FavoriesController extends Controller
 
     /**
      *  @OA\Get(
-     *      path="/api/v1/favorites",
-     *      tags={"Favorites"},
+     *      path="/api/v1/user/favorites",
+     *      tags={"User Favorites"},
      *      summary="Favorites list",
-     *      @OA\RequestBody(
-     *          @OA\JsonContent(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="page",
-     *                  type="integer",
-     *                  example="1"
-     *              ),
-     *              @OA\Property(
-     *                  property="per_page",
-     *                  type="integer",
-     *                  example="20"
-     *              ),
-     *          ),
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="per_page",
+     *          in="query",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="20"
+     *          )
      *      ),
      *  @OA\Response(
      *      response=200,
@@ -104,9 +109,10 @@ class FavoriesController extends Controller
 
     /**
      * @OA\Post(
-     *      path="/api/v1/favorites",
-     *      tags={"Favorites"},
+     *      path="/api/v1/user/favorites",
+     *      tags={"User Favorites"},
      *      summary="Favorites store",
+     *      security={{"bearerAuth":{}}},
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",

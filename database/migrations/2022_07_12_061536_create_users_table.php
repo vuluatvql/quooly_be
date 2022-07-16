@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('first_name_furigana', 255)->comment('ふりがな（姓）');
             $table->string('last_name_furigana', 255)->comment('ふりがな（名）');
             $table->string('email', 255)->comment('メールアドレス');
-            $table->date('birthday')->comment('生年月日');
+            $table->date('birthday')->comment('生年月日')->nullable();
             $table->string('password', 255)->comment('パスワード）');
             $table->string('phone_number', 255)->nullable()->comment('電話番号');
             $table->string('postcode', 255)->nullable()->comment('郵便番号');

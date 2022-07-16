@@ -10,6 +10,7 @@ interface UserInterface
     public function destroy($id);
     public function checkEmail($request);
     public function store($request);
+    public function register($request);
     public function getById($id);
     public function update($request, $id);
     public function updateLastLogin($id);
@@ -17,4 +18,5 @@ interface UserInterface
     public function generalResetPass($request);
     public function getUserByToken($token);
     public function updatePasswordByToken($request, $token);
+    public function changePassword($request);
 }

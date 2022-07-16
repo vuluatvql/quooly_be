@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\StatusCode;
 use App\Enums\ContactType;
@@ -41,8 +41,8 @@ class ContactController extends Controller
 
     /**
      *  @OA\Post(
-     *      path="/api/v1/contact",
-     *      tags={"Contact"},
+     *      path="/api/v1/user/contact",
+     *      tags={"User Contact"},
      *      summary="Contact store",
      *      @OA\RequestBody(
      *          @OA\JsonContent(
@@ -71,11 +71,6 @@ class ContactController extends Controller
      *                  property="email",
      *                  type="string",
      *                  example="xxx@gmail.com"
-     *              ),
-     *              @OA\Property(
-     *                  property="contact_type",
-     *                  type="integer",
-     *                  example="1"
      *              ),
      *              @OA\Property(
      *                  property="content",
@@ -114,13 +109,8 @@ class ContactController extends Controller
             'last_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
             'email' => 'required|max:255|email',
             'content' => 'required|max:10000',
-            'contact_type' => [
-                'required',
-                Rule::in(array_map(function ($e) {
-                    return (string)$e;
-                }, ContactType::getValues()))
-            ]
         ]);
+        $request->contact_type = ContactType::USER;
         if ($validator->fails()) {
             return response()->json([
                 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
