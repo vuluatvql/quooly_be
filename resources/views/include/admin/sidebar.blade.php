@@ -16,6 +16,14 @@ $routeContact = [
     'admin.contact.edit',
     'admin.contact.update'
 ];
+$routeRequest = [
+    'admin.request.index',
+    'admin.request.create',
+    'admin.request.store',
+    'admin.request.show',
+    'admin.request.edit',
+    'admin.request.update'
+];
 @endphp
 <div class="sidebar sidebar-dark sidebar-fixed sidebar-lg-show" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
@@ -51,6 +59,14 @@ $routeContact = [
                                 <a class="nav-link {{ in_array($routeName, $routeContact) ? 'active' : '' }}" href="{{ route('admin.contact.index') }}">
                                     <i class="nav-icon fa fa-phone" aria-hidden="true"></i>
                                     問い合わせ一覧
+                                </a>
+                            </li>
+                        </div>
+                        <div class="simplebar-content">
+                            <li class="nav-item">
+                                <a class="nav-link {{ in_array($routeName, $routeRequest) ? 'active' : '' }}" href="{{ route('admin.request.index') }}">
+                                    <i class="nav-icon fa fa-retweet" aria-hidden="true"></i>
+                                    リストリクエスト
                                 </a>
                             </li>
                         </div>

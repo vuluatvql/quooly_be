@@ -22,21 +22,21 @@ class RequestRepository extends BaseController implements RequestInterface
 
     public function getRequests($request)
     {
-        // $newSizeLimit = $this->newListLimit($request);
-        // $requestBuilder = $this->request;
-        // if (isset($request['search_input'])) {
-        //     $requestBuilder = $requestBuilder->where(function ($q) use ($request) {
-        //         $q->orWhere($this->escapeLikeSentence('name', $request['search_input']));
-        //     });
-        // }
-        // $requests = $requestBuilder->sortable(['created_at' => 'desc', 'status' => 'desc'])->paginate($newSizeLimit);
-        // if ($this->checkPaginatorList($requests)) {
-        //     Paginator::currentPageResolver(function () {
-        //         return 1;
-        //     });
-        //     $requests = $requestBuilder->paginate($newSizeLimit);
-        // }
-        // return $requests;
+        $newSizeLimit = $this->newListLimit($request);
+        $requestBuilder = $this->request;
+        if (isset($request['search_input'])) {
+            $requestBuilder = $requestBuilder->where(function ($q) use ($request) {
+                $q->orWhere($this->escapeLikeSentence('name', $request['search_input']));
+            });
+        }
+        $requests = $requestBuilder->sortable(['created_at' => 'desc'])->paginate($newSizeLimit);
+        if ($this->checkPaginatorList($requests)) {
+            Paginator::currentPageResolver(function () {
+                return 1;
+            });
+            $requests = $requestBuilder->paginate($newSizeLimit);
+        }
+        return $requests;
     }
 
     public function destroy($id)
