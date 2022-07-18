@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\User;
 
 use App\Enums\StatusCode;
 use App\Enums\UserRole;
@@ -85,7 +85,7 @@ class ChangePasswordController extends Controller
     /**
      *  @OA\PUT(
      *      path="/api/v1/change-password",
-     *      tags={"Login"},
+     *      tags={"User Profile"},
      *      summary="change password",
      *      @OA\RequestBody(
      *          @OA\JsonContent(
@@ -129,7 +129,7 @@ class ChangePasswordController extends Controller
             'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
             're_password' => 'required_with:password|same:password|max:16|min:8|regex:/^[A-Za-z0-9]*$/'
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
@@ -143,7 +143,7 @@ class ChangePasswordController extends Controller
             ], StatusCode::OK);
         }
         return response()->json([
-            'message' => "トークンが無効です",
+            'message' => "エラーが発生しました。",
             'status_code' => StatusCode::BAD_REQUEST
         ], StatusCode::OK);
     }

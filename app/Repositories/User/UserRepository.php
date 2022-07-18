@@ -110,7 +110,7 @@ class UserRepository extends BaseController implements UserInterface
 
     public function getById($id)
     {
-        return $this->user->where('id', $id)->first();
+        return $this->user->with('userOptional')->where('id', $id)->first();
     }
 
     public function update($request, $id)

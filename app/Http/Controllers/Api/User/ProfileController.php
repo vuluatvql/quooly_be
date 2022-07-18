@@ -178,7 +178,7 @@ class ProfileController extends Controller
      **/
     public function update(Request $request, $id)
     {
-        $currentUser = JWTAuth::toUser();
+        $currentUser = JWTAuth::user();
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
@@ -254,7 +254,50 @@ class ProfileController extends Controller
             'message' => 'ユーザーの変更が完了しました。',
             'status_code' => StatusCode::OK
         ], StatusCode::OK);
+    }
 
+    /**
+     * @OA\Get(
+     *      path="/api/v1/user/profile/{id}",
+     *      tags={"User Profile"},
+     *      summary="get user profile",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              example="1"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Success",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Invalid request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error"
+     *      ),
+     *  )
+     **/
+    public function show($id)
+    {
+        return response()->json([
+            'status_code' => StatusCode::OK,
+            'data' => $this->user->getById(JWTAuth::user()->id)
+        ], StatusCode::OK);
     }
 
 }
