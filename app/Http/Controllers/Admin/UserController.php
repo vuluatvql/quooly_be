@@ -98,7 +98,7 @@ class UserController extends BaseController
             ],
             'ユーザー編集'
         ];
-        $user = $this->userInterface->getById($id);
+        $user = $this->user->getById($id);
         if (!$user) {
             return redirect(session()->get('admin.user.list')[0] ?? route('admin.user.index'));
         }
