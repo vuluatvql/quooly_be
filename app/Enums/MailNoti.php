@@ -6,15 +6,15 @@ use BenSampo\Enum\Enum;
 
 final class MailNoti extends Enum
 {
-    const NOT_ACCEPT = 0;
     const RECEUVE = 1;
+    const NOT_ACCEPT = 0;
     public static function getDescription($value): string
     {
         switch ($value) {
-            case self::UN_PUBLISH:
+            case self::RECEUVE:
                 return '受け取る';
                 break;
-            case self::PUBLISH:
+            case self::NOT_ACCEPT:
                 return '受け取らない';
                 break;
             default:

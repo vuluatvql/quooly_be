@@ -11,5 +11,6 @@
     'propertyDivision' => $propertyDivision,
     'propertyKodateChintai' => $propertyKodateChintai,
     'prefectures' => $prefectures,
+    'mailNoti' => $mailNoti,
 ]) }}"></user-create>
 @endsection

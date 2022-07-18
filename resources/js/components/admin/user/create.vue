@@ -350,29 +350,16 @@
                     <CFormLabel class="col-sm-12" require
                       >お気に入り物件が値下げされたときのメール配信</CFormLabel
                     >
-                    <div class="col-sm-3">
+                    <div class="col-sm-3" v-for="(item, index) in data.mailNoti" :key="index">
                       <div class="d-flex mail-flg-box">
-                        <CFormCheck 
+                        <input 
                           type="radio"
                           name="mail_magazine_flag"
-                          id="mail_magazine_flag_on"
+                          :id="'mail_magazine_flag_'+item.id"
                           v-model="model.mail_magazine_flag"
-                          class="form-control w-75 mr-2 mt-3"
-                          value="1"
-                          checked
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="mail_magazine_flag_on">受け取る</label></span>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="d-flex mail-flg-box">
-                        <CFormCheck 
-                          type="radio"
-                          name="mail_magazine_flag"
-                          id="mail_magazine_flag_off"
-                          v-model="model.mail_magazine_flag"
-                          class="form-control w-75 mr-2 mt-3"
-                          value="0"
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="mail_magazine_flag_off">受け取らない</label></span>
+                          class="mr-2 cformcheck-ip form-check-input"
+                          :value="item.id"
+                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label :for="'mail_magazine_flag_'+item.id">{{ item.label }}</label></span>
                       </div>
                     </div>
                     <ErrorMessage class="error" name="mail_magazine_flag" />
@@ -381,29 +368,16 @@
                     <CFormLabel class="col-sm-12" require
                       >お住まいのエリアで開催されるセミナーのメール通知（週1回配信）</CFormLabel
                     >
-                    <div class="col-sm-3">
+                    <div class="col-sm-3" v-for="(item, index) in data.mailNoti" :key="index">
                       <div class="d-flex mail-flg-box">
-                        <CFormCheck 
+                        <input 
                           type="radio"
                           name="request_noti_flag"
-                          id="request_noti_flag_on"
+                          :id="'request_noti_flag_'+item.id"
                           v-model="model.request_noti_flag"
-                          class="form-control w-75 mr-2 mt-3"
-                          value="1"
-                          checked
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="request_noti_flag_on">受け取る</label></span>
-                      </div>
-                    </div>
-                    <div class="col-sm-3">
-                      <div class="d-flex mail-flg-box">
-                        <CFormCheck 
-                          type="radio"
-                          name="request_noti_flag"
-                          id="request_noti_flag_off"
-                          v-model="model.request_noti_flag"
-                          class="form-control w-75 mr-2 mt-3"
-                          value="0"
-                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label for="request_noti_flag_off">受け取らない</label></span>
+                          class="mr-2 cformcheck-ip form-check-input"
+                          :value="item.id"
+                        /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label :for="'request_noti_flag_'+item.id">{{ item.label }}</label></span>
                       </div>
                     </div>
                     <ErrorMessage class="error" name="request_noti_flag" />
@@ -474,11 +448,8 @@ export default {
       csrfToken: Laravel.csrfToken,
       flagShowLoader: false,
       model: {
-        birthday: {
-          year: '',
-          month: '',
-          day: ''
-        }
+        mail_magazine_flag: 1,
+        request_noti_flag: 1,
       },
     };
   },

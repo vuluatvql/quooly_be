@@ -37,7 +37,7 @@ class UserRequest extends FormRequest
             'first_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
             'last_name_furigana' => 'required|max:255|regex:/^[ぁ-ん]+$/',
             'birthday' => 'required|date_format:Y/m/d|before_or_equal:' . Carbon::now()->format('Y/m/d'),
-            'password' => 'nullable|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
+            'password' => 'required|max:16|min:8|regex:/^[A-Za-z0-9]*$/',
             'phone_number' => [
                 'required',
                 'regex:/^(0(\d-\d{4}-\d{4}))|(0(\d{3}-\d{2}-\d{4}))|((070|080|090|050)(-\d{4}-\d{4}))|(0(\d{2}-\d{3}-\d{4}))+$/'
@@ -59,9 +59,9 @@ class UserRequest extends FormRequest
                 'integer',
                 Rule::in(IndustryType::getValues())
             ],
-            'rent_income' => 'required|integer',
-            'annual_income' => 'required|integer',
-            'user_income' => 'required|integer',
+            'rent_income' => 'required|integer|min:0',
+            'annual_income' => 'required|integer|min:0',
+            'user_income' => 'required|integer|min:0',
             'property_building' => 'required|integer',
             'property_division' => 'required|integer',
             'property_kodate_chintai' => 'required|integer',

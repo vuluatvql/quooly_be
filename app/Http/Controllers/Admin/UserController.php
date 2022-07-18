@@ -13,6 +13,7 @@ use App\Enums\JobType;
 use App\Enums\PropertyBuilding;
 use App\Enums\PropertyDivision;
 use App\Enums\PropertyKodateChintai;
+use App\Enums\MailNoti;
 
 class UserController extends BaseController
 {
@@ -65,6 +66,7 @@ class UserController extends BaseController
         $propertyBuilding = PropertyBuilding::parseArray();
         $propertyDivision = PropertyDivision::parseArray();
         $propertyKodateChintai = PropertyKodateChintai::parseArray();
+        $mailNoti = MailNoti::parseArray();
         $prefectures = $this->prefecture->getOption();
         
         return view('admin.user.create', [
@@ -76,6 +78,7 @@ class UserController extends BaseController
             'propertyDivision' => $propertyDivision,
             'propertyKodateChintai' => $propertyKodateChintai,
             'prefectures' => $prefectures,
+            'mailNoti' => $mailNoti,
         ]);
     }
 
