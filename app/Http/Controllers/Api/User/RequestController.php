@@ -94,22 +94,22 @@ class RequestController extends Controller
      *                  example="comment"
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_type[0]",
+     *                  property="bukken_type[0]",
      *                  type="int",
      *                  example=1
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_type[1]",
+     *                  property="bukken_type[1]",
      *                  type="int",
      *                  example=3
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_structures[0]",
+     *                  property="bukken_structures[0]",
      *                  type="int",
      *                  example=1
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_structures[1]",
+     *                  property="bukken_structures[1]",
      *                  type="int",
      *                  example=2
      *              ),
@@ -163,9 +163,7 @@ class RequestController extends Controller
                 Rule::in(BukkenType::getValues())
             ],
             'bukken_structures' => [
-                'present',
                 'array',
-                'min:1',
                 Rule::in(BukkenStructure::getValues())
             ],
         ]);
