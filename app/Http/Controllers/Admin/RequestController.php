@@ -8,8 +8,6 @@ use App\Repositories\Request\RequestInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-use function PHPSTORM_META\type;
-
 class RequestController extends BaseController
 {
     private $request;
@@ -28,7 +26,7 @@ class RequestController extends BaseController
             'リストリクエスト',
         ];
         $newSizeLimit = $this->newListLimit($request);
-        
+
         return view('admin.request.index', [
             'title' => 'リストリクエスト',
             'breadcrumbs' => $breadcrumbs,
@@ -69,18 +67,18 @@ class RequestController extends BaseController
     {
         $breadcrumbs = [
             [
-                'url' => session()->get('admin.request.list')[0] ?? route('admin.request.index'),
-                'name' => '詳細をリクエストする',
+                'url' => route('admin.request.index'),
+                'name' => 'リストリクエスト',
             ],
             '詳細をリクエストする'
         ];
         $request = $this->request->getById($id);
         if (!$request) {
-            return redirect(session()->get('admin.request.list')[0] ?? route('admin.request.index'));
+            return redirect(route('admin.request.index'));
         }
-        $created_at = Carbon::parse($request->created_at)->format('Y年m月d日');
+        $createdAt = Carbon::parse($request->created_at)->format('Y年m月d日');
         $request = $request->toArray();
-        $request['created_at'] = $created_at;
+        $request['created_at'] = $createdAt;
         return view('admin.request.show', [
             'title' => '詳細をリクエストする',
             'breadcrumbs' => $breadcrumbs,
