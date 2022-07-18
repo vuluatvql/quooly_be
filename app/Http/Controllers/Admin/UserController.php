@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\UserRequest;
 use App\Repositories\User\UserInterface;
+use App\Repositories\Prefecture\PrefectureInterface;
 use App\Http\Controllers\BaseController;
 use App\Enums\StatusCode;
 use Illuminate\Http\Request;
@@ -12,14 +13,17 @@ use App\Enums\JobType;
 use App\Enums\PropertyBuilding;
 use App\Enums\PropertyDivision;
 use App\Enums\PropertyKodateChintai;
-use App\Models\Prefecture;
 
 class UserController extends BaseController
 {
     private $user;
-    public function __construct(UserInterface $user)
-    {
+    private $prefecture;
+    public function __construct(
+        UserInterface $user,
+        PrefectureInterface $prefecture
+    ) {
         $this->user = $user;
+        $this->prefecture = $prefecture;
     }
     /**
      * Display a listing of the resource.
@@ -61,9 +65,7 @@ class UserController extends BaseController
         $propertyBuilding = PropertyBuilding::parseArray();
         $propertyDivision = PropertyDivision::parseArray();
         $propertyKodateChintai = PropertyKodateChintai::parseArray();
-        $prefectures = Prefecture::select('id as value', 'name as label')
-            ->orderBy('order_num')
-            ->get();
+        $prefectures = $this->prefecture->getOption();
         
         return view('admin.user.create', [
             'title' => 'ユーザー作成',
@@ -119,7 +121,7 @@ class UserController extends BaseController
             ],
             'ユーザー編集'
         ];
-        $user = $this->userInterface->getById($id);
+        $user = $this->user->getById($id);
         if (!$user) {
             return redirect(session()->get('admin.user.list')[0] ?? route('admin.user.index'));
         }
@@ -139,7 +141,7 @@ class UserController extends BaseController
      */
     public function update(UserRequest $request, $id)
     {
-        if ($this->userInterface->update($request, $id)) {
+        if ($this->user->update($request, $id)) {
             $this->setFlash(__('代理店の新規作成が完了しました。'));
             return redirect(session()->get('admin.user.list')[0] ?? route('admin.user.index'));
         }
@@ -155,7 +157,7 @@ class UserController extends BaseController
      */
     public function destroy($id)
     {
-        if ($this->userInterface->destroy($id)) {
+        if ($this->user->destroy($id)) {
             return response()->json([
                 'message' => 'お知らせの削除が完了しました。',
                 'status' => StatusCode::OK

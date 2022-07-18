@@ -14,8 +14,10 @@
                 @submit="handleSubmit($event, onSubmit)"
                 :action="data.urlStore"
                 ref="formData"
+                class="h-adr"
               >
                 <Field type="hidden" :value="csrfToken" name="_token" />
+                <span class="p-country-name" style="display:none;">Japan</span>
                 <CCardHeader>
                   <CFormLabel>ユーザー詳細_編集画面</CFormLabel>
                 </CCardHeader>
@@ -28,7 +30,7 @@
                       <Field
                         name="first_name"
                         v-model="model.first_name"
-                        rules="required"
+                        rules="required|max:255"
                         class="form-control"
 
                       />
@@ -38,7 +40,7 @@
                       <Field
                         name="last_name"
                         v-model="model.last_name"
-                        rules="required"
+                        rules="required|max:255"
                         class="form-control"
                         placeholder="例）太郎"
                       />
@@ -53,7 +55,7 @@
                       <Field
                         name="first_name_furigana"
                         v-model="model.first_name_furigana"
-                        rules="required|is_furigana"
+                        rules="required|is_furigana|max:255"
                         class="form-control"
                         placeholder="例）やまだ"
 
@@ -64,7 +66,7 @@
                       <Field
                         name="last_name_furigana"
                         v-model="model.last_name_furigana"
-                        rules="required|is_furigana"
+                        rules="required|is_furigana|max:255"
                         class="form-control"
                         placeholder="例）太郎"
                       />
@@ -79,7 +81,7 @@
                       <Field
                         name="email"
                         v-model="model.email"
-                        rules="required|unique_custom|email"
+                        rules="required|unique_custom|email|max:255"
                         class="form-control"
                       />
                       <ErrorMessage class="error" name="email" />
@@ -130,15 +132,19 @@
                         name="postcode"
                         v-model="model.postcode"
                         rules="required|max:10"
-                        class="form-control"
+                        class="form-control p-postal-code"
                         placeholder="例）01234567"
 
                       />
+                      <input type="hidden" name="pRegionId" class="p-region-id" ref="adr_preg">
+                      <input type="hidden" name="pLocality" class="p-locality p-street-address" ref="adr_addr01">
+                      <input type="hidden" name="pExtendedAddress" class="p-extended-address" ref="adr_addr02">
                       <ErrorMessage class="error" name="postcode" />
                     </div>
                     <div class="col-sm-3">
                       <CButton
                         class="c-button-orange-outline search-postcode-btn"
+                        v-on:click="getPostCode"
                       >
                         住所を検索
                       </CButton>
@@ -152,7 +158,8 @@
                       <CFormSelect
                         name="prefecture_id"
                         v-model="model.prefecture_id"
-                        rules="required"
+                        rules="required|max:255"
+                        class=""
                         :options="data.prefectures">
                       </CFormSelect>
                       <ErrorMessage class="error" name="prefecture_id" />
@@ -164,7 +171,7 @@
                       <Field
                         name="city"
                         v-model="model.city"
-                        rules="required"
+                        rules="required|max:255"
                         class="form-control"
                         placeholder="例）渋谷区"
 
@@ -180,7 +187,7 @@
                       <Field
                         name="address"
                         v-model="model.address"
-                        rules="required"
+                        rules="required|max:255"
                         class="form-control"
                         placeholder="例）渋谷町1丁目2-3 渋谷マンション205号室"
 
@@ -239,6 +246,7 @@
                         format="yyyy/MM/dd"
                         rules="required"
                         autoApply
+                        :maxDate="new Date()"
                         placeholder="0000年/00月/00日"
                       >
                       </Datepicker>
@@ -255,7 +263,8 @@
                           type="number"
                           name="rent_income"
                           v-model="model.rent_income"
-                          rules="required|number"
+                          min="0"
+                          rules="required|number|min:0"
                           class="form-control w-75 mr-2"
                           placeholder=""
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;万円</span>
@@ -271,7 +280,8 @@
                           type="number"
                           name="annual_income"
                           v-model="model.annual_income"
-                          rules="required|number"
+                          rules="required|number|min:0"
+                          min="0"
                           class="form-control w-75 mr-2"
                           placeholder=""
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;万円</span>
@@ -289,7 +299,8 @@
                           type="number"
                           name="user_income"
                           v-model="model.user_income"
-                          rules="required|number"
+                          rules="required|number|min:0"
+                          min="0"
                           class="form-control w-75 mr-2"
                           placeholder=""
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;万円</span>
@@ -477,17 +488,21 @@ export default {
         fields: {
           first_name: {
             required: "ユーザー名を入力してください。",
+            max: "255文字を超えて入力しないでください。"
           },
           last_name: {
             required: "ユーザー名を入力してください。",
+            max: "255文字を超えて入力しないでください。"
           },
           first_name_furigana: {
             required: "ユーザー名を入力してください。",
             is_furigana: "フリガナは全角文字で入力してください",
+            max: "255文字を超えて入力しないでください。"
           },
           last_name_furigana: {
             required: "ユーザー名を入力してください。",
             is_furigana: "フリガナは全角文字で入力してください",
+            max: "255文字を超えて入力しないでください。"
           },
           postcode: {
             required: "ユーザー名を入力してください。",
@@ -498,6 +513,7 @@ export default {
           },
           city: {
             required: "ユーザー名を入力してください。",
+            max: "255文字を超えて入力しないでください。"
           },
           company_industry_type: {
             required: "ユーザー名を入力してください。",
@@ -507,10 +523,12 @@ export default {
           },
           address: {
             required: "ユーザー名を入力してください。",
+            max: "255文字を超えて入力しないでください。"
           },
           phone_number: {
             required: "ユーザー名を入力してください。",
             telephone: "ユーザー名を入力してください。",
+            max: "255文字を超えて入力しないでください。"
           },
           birthday: {
             required: "ユーザー名を入力してください。",
@@ -518,19 +536,23 @@ export default {
           rent_income: {
             required: "ユーザー名を入力してください。",
             number: "ユーザー名を入力してください。",
+            min: '0未満は入力しないでください。'
           },
           annual_income: {
             required: "ユーザー名を入力してください。",
             number: "ユーザー名を入力してください。",
+            min: '0未満は入力しないでください。'
           },
           user_income: {
             required: "ユーザー名を入力してください。",
             number: "ユーザー名を入力してください。",
+            min: '0未満は入力しないでください。'
           },
           email: {
             required: "ユーザーのメールを入力してください。",
             unique_custom: "このメールアドレスは既に登録されています。",
-            email: 'メールが無効になります。'
+            email: 'メールが無効になります。',
+            max: "255文字を超えて入力しないでください。"
           },
           password: {
             password_rule:
@@ -579,6 +601,11 @@ export default {
       this.flagShowLoader = true;
       this.$refs.formData.submit();
     },
+    getPostCode() {
+      this.model.prefecture_id = this.$refs.adr_preg.value;
+      this.model.city = this.$refs.adr_addr01.value;
+      this.model.address = this.$refs.adr_addr02.value;
+    }
   },
 };
 </script>

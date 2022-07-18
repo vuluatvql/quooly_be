@@ -233,6 +233,10 @@ table tbody tr td {
 .c-button-orange-outline {
     border: 1px solid #FF5E00;
 }
+.c-button-orange-outline:focus {
+    border: 1px solid #FF5E00;
+    color: #FF5E00;
+}
 .search-postcode-btn {
     color:#FF5E00;
 }

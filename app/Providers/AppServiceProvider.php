@@ -16,6 +16,8 @@ use App\Repositories\UserOptional\UserOptionalInterface;
 use App\Repositories\UserOptional\UserOptionalRepository;
 use App\Repositories\ViewHistory\ViewHistoryInterface;
 use App\Repositories\ViewHistory\ViewHistoryRepository;
+use App\Repositories\Prefecture\PrefectureInterface;
+use App\Repositories\Prefecture\PrefectureRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FavoritesInterface::class, FavoritesRepository::class);
         $this->app->bind(RequestInterface::class, RequestRepository::class);
         $this->app->bind(UserOptionalInterface::class, UserOptionalRepository::class);
+        $this->app->bind(PrefectureInterface::class, PrefectureRepository::class);
     }
 
     /**
