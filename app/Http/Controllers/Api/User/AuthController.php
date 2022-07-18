@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\Models\KonamiUser;
 use App\Enums\StatusCode;
+use App\Enums\UserRole;
 use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -79,6 +79,7 @@ class AuthController extends Controller
         }
         try {
             $credentials = $request->only('email', 'password');
+            $credentials['role_id'] = UserRole::USER;
             $token = JWTAuth::attempt($credentials);
             if (!$token) {
                 return response()->json([
