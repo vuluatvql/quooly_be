@@ -44,7 +44,7 @@ class RequestController extends Controller
      *      path="/api/v1/user/request",
      *      tags={"User Request"},
      *      summary="store request",
-     *      security={{"BearerAuth":{}}},
+     *      security={{"bearerAuth":{}}},
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
@@ -94,22 +94,22 @@ class RequestController extends Controller
      *                  example="comment"
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_type[0]",
+     *                  property="bukken_type[0]",
      *                  type="int",
      *                  example=1
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_type[1]",
+     *                  property="bukken_type[1]",
      *                  type="int",
      *                  example=3
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_structures[0]",
+     *                  property="bukken_structures[0]",
      *                  type="int",
      *                  example=1
      *              ),
      *              @OA\Property(
-     *                  property="bukkent_structures[1]",
+     *                  property="bukken_structures[1]",
      *                  type="int",
      *                  example=2
      *              ),
@@ -158,26 +158,18 @@ class RequestController extends Controller
             'construction_year' => 'required|integer',
             'walkrange' => 'required|integer',
             'comment' => 'required|string|max:5000',
-            'bukken_type' => 'array',
-            'bukken_type.*' => [
-                'required',
-                'integer',
+            'bukken_type' => [
+                'array',
                 Rule::in(BukkenType::getValues())
             ],
             'bukken_structures' => [
-                'present',
                 'array',
-                'min:1'
-            ],
-            'bukken_structures.*' => [
-                'required',
-                'integer',
                 Rule::in(BukkenStructure::getValues())
             ],
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'message' => $validator->errors(),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }

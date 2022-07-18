@@ -43,6 +43,7 @@ class ViewHistoryController extends Controller
      *      path="/api/v1/user/view-history",
      *      tags={"User ViewHistory"},
      *      summary="ViewHistory store",
+     *      security={{"bearerAuth":{}}},
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
@@ -84,7 +85,7 @@ class ViewHistoryController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'message' => array_combine($validator->errors()->keys(), $validator->errors()->all()),
+                'message' => $validator->errors(),
                 'status_code' => StatusCode::BAD_REQUEST
             ], StatusCode::OK);
         }

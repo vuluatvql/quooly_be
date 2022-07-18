@@ -10,6 +10,8 @@ use App\Http\Controllers\PasswordResetExpiredController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\RequestController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,4 +42,5 @@ Route::group([
     Route::resource('contact', ContactController::class, ['as' => 'admin']);
     Route::resource('favories', FavoriesController::class, ['as' => 'admin']);
     Route::post('check-email', [UserController::class, 'checkEmail'])->name('admin.user.checkEmail');
+    Route::resource('request', RequestController::class, ['as' => 'admin']);
 });

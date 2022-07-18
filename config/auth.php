@@ -78,7 +78,7 @@ return [
             'model' => App\Models\Admin::class,
         ],
         'api' => [
-            'driver' => 'eloquent',
+            'driver' => 'custom_api_auth',
             'model' => App\Models\User::class,
             'hash' => false,
         ],

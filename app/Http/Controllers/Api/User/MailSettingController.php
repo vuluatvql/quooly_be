@@ -74,10 +74,19 @@ class MailSettingController extends Controller
 
     /**
      *  @OA\Put(
-     *      path="/api/v1/user/mail-setting/id",
+     *      path="/api/v1/user/mail-setting/{id}",
      *      tags={"User Profile"},
      *      summary="Setting email notifications",
-     *
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              example="1"
+     *          )
+     *      ),
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",

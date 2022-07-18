@@ -37,6 +37,7 @@ import LimitPageOption from "./components/common/limitPageOption.vue";
 import UserCreate from "./components/admin/user/create.vue";
 import UserEdit from "./components/admin/user/edit.vue";
 import ContactEdit from "./components/admin/contact/edit.vue";
+import RequestShow from "./components/admin/request/show.vue";
 
 app.component("btn-delete-confirm", BtnDeleteConfirm);
 app.component("data-empty", DataEmpty);
@@ -45,6 +46,7 @@ app.component("limit-page-option", LimitPageOption);
 app.component("user-create", UserCreate);
 app.component("user-edit", UserEdit);
 app.component("contact-edit", ContactEdit);
+app.component("request-show", RequestShow);
 app.component('Datepicker', Datepicker);
 
 app.mount("#app");

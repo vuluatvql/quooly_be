@@ -84,9 +84,19 @@ class ChangePasswordController extends Controller
 
     /**
      *  @OA\PUT(
-     *      path="/api/v1/change-password",
+     *      path="/api/v1/user/change-password/{id}",
      *      tags={"User Profile"},
      *      summary="change password",
+     *      security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              example="1"
+     *          )
+     *      ),
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
