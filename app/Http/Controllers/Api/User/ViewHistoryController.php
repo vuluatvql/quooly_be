@@ -43,6 +43,7 @@ class ViewHistoryController extends Controller
      *      path="/api/v1/user/view-history",
      *      tags={"User ViewHistory"},
      *      summary="ViewHistory store",
+     *      security={{"bearerAuth":{}}},
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",

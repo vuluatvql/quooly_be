@@ -44,7 +44,7 @@ class RequestController extends Controller
      *      path="/api/v1/user/request",
      *      tags={"User Request"},
      *      summary="store request",
-     *      security={{"BearerAuth":{}}},
+     *      security={{"bearerAuth":{}}},
      *      @OA\RequestBody(
      *          @OA\JsonContent(
      *              type="object",
