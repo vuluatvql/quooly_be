@@ -94,7 +94,7 @@ a {
     margin-top: 20px;
 }
 .title-login {
- margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 .title-forgot-password {
     font-weight: bold;
@@ -150,7 +150,7 @@ table tbody tr td {
     flex-flow: row wrap;
     align-items: center;
 }
-@media (min-width: 576px)
+@media (min-width: 576px) 
 {
     .form-inline .form-control {
         display: inline-block;
@@ -179,11 +179,14 @@ table tbody tr td {
     background-color: #2778c4 !important;
 }
 *[require]:after {
-    content: "\203B";
-    color: red;
+    content: "必須";
+    color: #fff;
+    background-color: #FF5E00;
     font-size: 12px;
+    padding: 1px 4px;
+    border-radius: 4px;
     position: absolute;
-    margin-left: 3px;
+    margin-left: 8px;
 }
 .row {
     position: relative;
@@ -226,4 +229,30 @@ table tbody tr td {
             font-size: 30px;
         }
     }
+}
+.c-button-orange-outline {
+    border: 1px solid #FF5E00;
+}
+.search-postcode-btn {
+    color:#FF5E00;
+}
+.search-postcode-btn:hover {
+    border: 1px solid #FF5E00;
+    color:#FF5E00;
+}
+.mail-flg-box .form-check-input {
+    margin-top: 12px;
+}
+input[type='radio']:checked {
+    background-color: #FF5E00;
+    border-color: #FF5E00;
+}
+.pd-26 {
+    padding: 26px;
+}
+.size-btn-cancel {
+    height: 56px;
+    min-width: 260px;
+    padding-top: 16px;
+    border: 0px;
 }

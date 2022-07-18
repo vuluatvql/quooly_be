@@ -9,23 +9,23 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class IndustryType extends Enum
+final class PropertyKodateChintai extends Enum
 {
-    const INDUSTRY_ONE =   1;
-    const INDUSTRY_TWO =   2;
-    const INDUSTRY_THREE = 3;
+    const OPT_ONE =   1;
+    const OPT_TWO =   2;
+    const OPT_THREE = 3;
 
     public static function getDescription($value): string
     {
         switch ($value) {
-            case self::INDUSTRY_ONE:
-                return ' 業界1';
+            case self::OPT_ONE:
+                return 'option 1';
                 break;
-            case self::INDUSTRY_TWO:
-                return '業界2';
+            case self::OPT_TWO:
+                return 'option 2';
                 break;
-            case self::INDUSTRY_THREE:
-                return '業界3';
+            case self::OPT_THREE:
+                return 'option 3';
                 break;
             default:
                 return "";

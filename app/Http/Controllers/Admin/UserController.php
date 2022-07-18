@@ -7,6 +7,12 @@ use App\Repositories\User\UserInterface;
 use App\Http\Controllers\BaseController;
 use App\Enums\StatusCode;
 use Illuminate\Http\Request;
+use App\Enums\IndustryType;
+use App\Enums\JobType;
+use App\Enums\PropertyBuilding;
+use App\Enums\PropertyDivision;
+use App\Enums\PropertyKodateChintai;
+use App\Models\Prefecture;
 
 class UserController extends BaseController
 {
@@ -50,9 +56,24 @@ class UserController extends BaseController
             ],
             'ユーザー作成'
         ];
+        $industryTypes = IndustryType::parseArray();
+        $jobTypes = JobType::parseArray();
+        $propertyBuilding = PropertyBuilding::parseArray();
+        $propertyDivision = PropertyDivision::parseArray();
+        $propertyKodateChintai = PropertyKodateChintai::parseArray();
+        $prefectures = Prefecture::select('id as value', 'name as label')
+            ->orderBy('order_num')
+            ->get();
+        
         return view('admin.user.create', [
             'title' => 'ユーザー作成',
-            'breadcrumbs' => $breadcrumbs
+            'breadcrumbs' => $breadcrumbs,
+            'industryTypes' => $industryTypes,
+            'jobTypes' => $jobTypes,
+            'propertyBuilding' => $propertyBuilding,
+            'propertyDivision' => $propertyDivision,
+            'propertyKodateChintai' => $propertyKodateChintai,
+            'prefectures' => $prefectures,
         ]);
     }
 
@@ -64,7 +85,7 @@ class UserController extends BaseController
      */
     public function store(UserRequest $request)
     {
-        if ($this->userInterface->store($request)) {
+        if ($this->user->store($request)) {
             $this->setFlash(__('代理店の新規作成が完了しました。'));
             return redirect(session()->get('admin.user.list')[0] ?? route('admin.user.index'));
         }
@@ -149,7 +170,7 @@ class UserController extends BaseController
     public function checkEmail(Request $request)
     {
         return response()->json([
-            'valid' => $this->userInterface->checkEmail($request),
+            'valid' => $this->user->checkEmail($request),
         ], StatusCode::OK);
     }
 }

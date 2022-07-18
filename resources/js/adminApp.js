@@ -2,6 +2,8 @@
 import { createApp } from "vue";
 import CoreuiVue from "@coreui/vue";
 import { configure, defineRule } from "vee-validate";
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 configure({
     validateOnBlur: false,
     validateOnChange: false,
@@ -16,6 +18,16 @@ app.use(VueSweetalert2);
 
 defineRule('password_rule', value => {
     return /^[A-Za-z0-9]*$/i.test(value);
+});
+
+defineRule('is_furigana', value => {
+    return /^[ぁ-ん]+$/i.test(value);
+});
+defineRule('telephone', value => {
+    return /^0(\d-\d{4}-\d{4})+$/i.test(value.trim()) ||
+      /^0(\d{3}-\d{2}-\d{4})+$/i.test(value.trim()) ||
+      /^(070|080|090|050)(-\d{4}-\d{4})+$/i.test(value.trim()) ||
+      /^0(\d{2}-\d{3}-\d{4})+$/i.test(value.trim())
 });
 
 import BtnDeleteConfirm from "./components/common/btnDeleteConfirm.vue";
@@ -35,5 +47,6 @@ app.component("user-create", UserCreate);
 app.component("user-edit", UserEdit);
 app.component("contact-edit", ContactEdit);
 app.component("request-show", RequestShow);
+app.component('Datepicker', Datepicker);
 
 app.mount("#app");
