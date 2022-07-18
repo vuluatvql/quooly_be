@@ -240,8 +240,8 @@
                       >生年月日</CFormLabel
                     >
                     <div class="col-sm-6">
-                      <Datepicker 
-                        v-model="model.birthday" 
+                      <Datepicker
+                        v-model="model.birthday"
                         name="birthday"
                         format="yyyy/MM/dd"
                         rules="required"
@@ -259,7 +259,7 @@
                         >家賃収入*1</CFormLabel
                       >
                       <div class="d-flex">
-                        <CFormInput 
+                        <CFormInput
                           type="number"
                           name="rent_income"
                           v-model="model.rent_income"
@@ -276,7 +276,7 @@
                         >世帯年収（家賃収入込み）*2</CFormLabel
                       >
                       <div class="d-flex">
-                        <CFormInput 
+                        <CFormInput
                           type="number"
                           name="annual_income"
                           v-model="model.annual_income"
@@ -295,7 +295,7 @@
                         >不動産購入のための自己資金</CFormLabel
                       >
                       <div class="d-flex">
-                        <CFormInput 
+                        <CFormInput
                           type="number"
                           name="user_income"
                           v-model="model.user_income"
@@ -434,7 +434,7 @@ export default {
       if (rule != "default") {
         defineRule(rule, rules[rule]);
       }
-    }); 
+    });
   },
   components: {
     Loader,
@@ -559,11 +559,11 @@ export default {
   methods: {
     onInvalidSubmit({ values, errors, results }) {
       let firstInputError = Object.entries(errors)[0][0];
-      this.$el.querySelector("input[name=" + firstInputError + "]").focus();
+      this.$el.querySelector("[name='" + firstInputError + "']").focus();
       $("html, body").animate(
         {
           scrollTop:
-            $("input[name=" + firstInputError + "]").offset().top - 150,
+            $("[name='" + firstInputError + "']").offset().top - 150,
         },
         500
       );
