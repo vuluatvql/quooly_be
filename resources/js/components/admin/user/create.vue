@@ -359,10 +359,14 @@
                           v-model="model.mail_magazine_flag"
                           class="mr-2 cformcheck-ip form-check-input"
                           :value="item.id"
+                          :checked="item.id == 1"
+                          v-on:click="updateMailNoti($event)"
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label :for="'mail_magazine_flag_'+item.id">{{ item.label }}</label></span>
                       </div>
                     </div>
-                    <ErrorMessage class="error" name="mail_magazine_flag" />
+                    <p class="text-danger" v-if="mailMagazineFlagErrMsg">
+                      {{ mailMagazineFlagErrMsg }}
+                    </p>
                   </CRow>
                   <CRow class="mb-4">
                     <CFormLabel class="col-sm-12" require
@@ -377,10 +381,14 @@
                           v-model="model.request_noti_flag"
                           class="mr-2 cformcheck-ip form-check-input"
                           :value="item.id"
+                          :checked="item.id == 1"
+                          v-on:click="updateMailNoti($event)"
                         /> <span class="mt-2 pl-2">&nbsp;&nbsp;<label :for="'request_noti_flag_'+item.id">{{ item.label }}</label></span>
                       </div>
                     </div>
-                    <ErrorMessage class="error" name="request_noti_flag" />
+                    <p class="text-danger" v-if="requestNotiFlagErrMsg">
+                      {{ requestNotiFlagErrMsg }}
+                    </p>
                   </CRow>
                   <CRow class="mb-2">
                     <hr style="width: 97%; margin: auto;">
@@ -447,10 +455,9 @@ export default {
     return {
       csrfToken: Laravel.csrfToken,
       flagShowLoader: false,
-      model: {
-        mail_magazine_flag: 1,
-        request_noti_flag: 1,
-      },
+      mailMagazineFlagErrMsg: '',
+      requestNotiFlagErrMsg: '',
+      model: {},
     };
   },
   created() {
@@ -569,6 +576,9 @@ export default {
       );
     },
     onSubmit() {
+      if (this.mailMagazineFlagErrMsg != '' || this.requestNotiFlagErrMsg != '') {
+        return;
+      }
       this.flagShowLoader = true;
       this.$refs.formData.submit();
     },
@@ -576,6 +586,16 @@ export default {
       this.model.prefecture_id = this.$refs.adr_preg.value;
       this.model.city = this.$refs.adr_addr01.value;
       this.model.address = this.$refs.adr_addr02.value;
+    },
+    updateMailNoti(e) {
+      if (e.target.name == 'mail_magazine_flag') {
+        this.model.mail_magazine_flag = e.target.value;
+        this.mailMagazineFlagErrMsg = (![0,1].includes(this.model.mail_magazine_flag)) ? '' : 'メールマガジンが正しくありません。';
+      } else {
+        this.model.request_noti_flag = e.target.value;
+        this.requestNotiFlagErrMsg = (![0,1].includes(this.model.request_noti_flag)) ? '' : '無効な通知リクエスト。';
+      }
+
     }
   },
 };

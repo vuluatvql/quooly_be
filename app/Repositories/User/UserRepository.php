@@ -98,6 +98,8 @@ class UserRepository extends BaseController implements UserInterface
         $userOptional->property_building = $request->property_building;
         $userOptional->property_division = $request->property_division;
         $userOptional->property_kodate_chintai = $request->property_kodate_chintai;
+        $userOptional->mail_magazine_flag = $request->mail_magazine_flag;
+        $userOptional->request_noti_flag = $request->request_noti_flag;
         $userOptional->favorite_noti_flag = $request->favorite_noti_flag;
         $userOptional->seminar_noti_flag = $request->seminar_noti_flag;
         if ($user->save() && $user->userOptional()->save($userOptional)) {
@@ -142,6 +144,8 @@ class UserRepository extends BaseController implements UserInterface
         $userInfo->userOptional->property_building = $request->property_building;
         $userInfo->userOptional->property_division = $request->property_division;
         $userInfo->userOptional->property_kodate_chintai = $request->property_kodate_chintai;
+        $userInfo->userOptional->mail_magazine_flag = $request->mail_magazine_flag;
+        $userInfo->userOptional->request_noti_flag = $request->request_noti_flag;
         $userInfo->userOptional->favorite_noti_flag = $request->favorite_noti_flag;
         $userInfo->userOptional->seminar_noti_flag = $request->seminar_noti_flag;
         if ($userInfo->save() && $userInfo->userOptional->save()) {

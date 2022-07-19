@@ -59,6 +59,16 @@ class UserRequest extends FormRequest
                 'integer',
                 Rule::in(IndustryType::getValues())
             ],
+            'mail_magazine_flag' => [
+                'required',
+                'integer',
+                Rule::in(MailNoti::getValues())
+            ],
+            'request_noti_flag' => [
+                'required',
+                'integer',
+                Rule::in(MailNoti::getValues())
+            ],
             'rent_income' => 'required|integer|min:0',
             'annual_income' => 'required|integer|min:0',
             'user_income' => 'required|integer|min:0',
